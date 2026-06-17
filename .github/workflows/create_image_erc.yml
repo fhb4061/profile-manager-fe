@@ -29,6 +29,21 @@ jobs:
         - name: Login to ECR
           id: login-ecr
           uses: aws-actions/amazon-ecr-login@v2
+          
+        - name: Build, tag, and push to ECR
+          env:
+            ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+            IMAGE_TAG: ${{ github.sha }}
+          run: |
+            # Build the container
+            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        
+            # Also tag it as latest
+            docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        
+            # Push both tags to Amazon ECR
+            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
         
 
     
