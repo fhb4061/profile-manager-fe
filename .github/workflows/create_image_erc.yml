@@ -2,7 +2,7 @@ name: "Create Image for ECR"
 
 on:
     push:
-      branches: ["ecr-setup"]
+      branches: ["master"]
 
 env:
   ECR_REPOSITORY: "profile-repo"
