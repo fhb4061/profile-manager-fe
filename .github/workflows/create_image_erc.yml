@@ -38,9 +38,6 @@ jobs:
             # Build the container
             docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         
-            # Also tag it as latest
-            docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        
             # Push both tags to Amazon ECR
             docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         
