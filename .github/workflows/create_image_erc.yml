@@ -5,7 +5,7 @@ on:
       branches: ["format-image"]
 
 env:
-  ECR_REPOSITORY: "profile-repo"
+  ECR_REPOSITORY: "profile-manager-fe"
   AWS_REGION: "ap-southeast-2"
   ROLE_TO_ASSUME: "arn:aws:iam::405481637631:role/github-action-role"
 
@@ -36,7 +36,7 @@ jobs:
             IMAGE_TAG: ${{ github.sha }}
           run: |
             # Build the container
-            docker build -t profile-manage-fe:$IMAGE_TAG .
+            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         
             # Push to ECR
             docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
