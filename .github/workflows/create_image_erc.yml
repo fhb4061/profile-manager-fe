@@ -2,7 +2,7 @@ name: "Create Image for ECR"
 
 on:
     push:
-      branches: ["master"]
+      branches: ["format-image"]
 
 env:
   ECR_REPOSITORY: "profile-repo"
@@ -36,7 +36,7 @@ jobs:
             IMAGE_TAG: ${{ github.sha }}
           run: |
             # Build the container
-            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+            docker build -t profile-manage-fe:$IMAGE_TAG .
         
             # Push to ECR
             docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
