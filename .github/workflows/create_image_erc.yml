@@ -2,7 +2,7 @@ name: "Create Image for ECR"
 
 on:
     push:
-      branches: ["format-image"]
+      branches: ["master"]
 
 env:
   ECR_REPOSITORY: "profile-manager-fe"
