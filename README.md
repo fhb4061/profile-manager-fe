@@ -11,6 +11,6 @@
 
 ## Install and Run
 ```
-pnpm install
-pnpm dev
+npm install
+npm dev
 ```
