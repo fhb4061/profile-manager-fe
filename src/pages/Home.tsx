@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import { profiles } from '@/lib/profiles'
-import { AppShell, ProfileAvatar } from '@/components/AppShell'
+import { AppShell } from '@/components/AppShell'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Card } from '@/components/ui/card'
 
 export function Home() {
   return (
@@ -12,30 +14,34 @@ export function Home() {
       <p className="mt-1 text-sm text-muted-foreground">
         Browse profiles, or open your own to edit it.
       </p>
-      <ul className="mt-6 divide-y rounded-xl border bg-card shadow-sm">
-        {profiles.map((profile) => (
-          <li key={profile.id}>
-            <Link
-              to={`/profile/${profile.id}`}
-              className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-accent"
-            >
-              <ProfileAvatar
-                firstName={profile.firstName}
-                lastName={profile.lastName}
-              />
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-medium">
-                  {profile.firstName} {profile.lastName}
+      <Card className="mt-6 py-0">
+        <ul className="divide-y">
+          {profiles.map((profile) => (
+            <li key={profile.id}>
+              <Link
+                to={`/profile/${profile.id}`}
+                className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-accent"
+              >
+                <Avatar size="lg">
+                  <AvatarFallback className="bg-primary/10 font-heading font-semibold text-primary">
+                    {profile.firstName[0]}
+                    {profile.lastName[0]}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-medium">
+                    {profile.firstName} {profile.lastName}
+                  </span>
+                  <span className="block truncate text-xs text-muted-foreground">
+                    {profile.email}
+                  </span>
                 </span>
-                <span className="block truncate text-xs text-muted-foreground">
-                  {profile.email}
-                </span>
-              </span>
-              <ChevronRight className="size-4 text-muted-foreground" />
-            </Link>
-          </li>
-        ))}
-      </ul>
+                <ChevronRight className="size-4 text-muted-foreground" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Card>
     </AppShell>
   )
 }

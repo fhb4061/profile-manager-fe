@@ -1,7 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { getProfile, formatDate } from '@/lib/profiles'
-import { AppShell, ProfileAvatar } from '@/components/AppShell'
+import { AppShell } from '@/components/AppShell'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Card } from '@/components/ui/card'
 
 export function ProfileDetail() {
   const { id } = useParams()
@@ -43,26 +45,29 @@ export function ProfileDetail() {
         <ArrowLeft className="size-4" /> Back to profiles
       </Link>
       <div className="mt-4 flex items-center gap-4">
-        <ProfileAvatar
-          firstName={profile.firstName}
-          lastName={profile.lastName}
-          className="size-14 text-lg"
-        />
+        <Avatar className="size-14">
+          <AvatarFallback className="bg-primary/10 font-heading text-lg font-semibold text-primary">
+            {profile.firstName[0]}
+            {profile.lastName[0]}
+          </AvatarFallback>
+        </Avatar>
         <h1 className="font-heading text-2xl font-semibold tracking-tight">
           {profile.firstName} {profile.lastName}
         </h1>
       </div>
-      <dl className="mt-6 divide-y rounded-xl border bg-card shadow-sm">
-        {fields.map((field) => (
-          <div
-            key={field.label}
-            className="grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-3 sm:gap-4"
-          >
-            <dt className="text-sm text-muted-foreground">{field.label}</dt>
-            <dd className="text-sm sm:col-span-2">{field.value}</dd>
-          </div>
-        ))}
-      </dl>
+      <Card className="mt-6 py-0">
+        <dl className="divide-y">
+          {fields.map((field) => (
+            <div
+              key={field.label}
+              className="grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-3 sm:gap-4"
+            >
+              <dt className="text-sm text-muted-foreground">{field.label}</dt>
+              <dd className="text-sm sm:col-span-2">{field.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </Card>
     </AppShell>
   )
 }

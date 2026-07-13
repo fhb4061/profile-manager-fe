@@ -18,23 +18,3 @@ export function AppShell({ children }: { children: ReactNode }) {
     </div>
   )
 }
-
-export function ProfileAvatar({
-  firstName,
-  lastName,
-  className = 'size-10 text-sm',
-}: {
-  firstName: string
-  lastName: string
-  className?: string
-}) {
-  return (
-    <span
-      aria-hidden="true"
-      className={`flex shrink-0 items-center justify-center rounded-full bg-primary/10 font-heading font-semibold text-primary ${className}`}
-    >
-      {firstName[0]}
-      {lastName[0]}
-    </span>
-  )
-}
