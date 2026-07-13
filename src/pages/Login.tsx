@@ -21,37 +21,55 @@ export function Login() {
   }
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form>
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={() => setEmailTouched(true)}
-          />
-          {emailError && <p>Invalid email</p>}
-        </div>
-        <div>
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={() => setPasswordTouched(true)}
-          />
-          {passwordError && <p>Password must be at least 8 characters</p>}
-        </div>
-        <Button disabled={!isFormValid} onClick={handleLogin}>
+    <div className="flex min-h-svh items-center justify-center bg-background p-6">
+      <div className="w-full max-w-sm rounded-xl border bg-card p-8 shadow-sm">
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">
           Login
-        </Button>
-      </form>
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Sign in to manage your profile
+        </p>
+        <form className="mt-6 space-y-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={() => setEmailTouched(true)}
+            />
+            {emailError && (
+              <p className="text-sm text-destructive">Invalid email</p>
+            )}
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onBlur={() => setPasswordTouched(true)}
+            />
+            {passwordError && (
+              <p className="text-sm text-destructive">
+                Password must be at least 8 characters
+              </p>
+            )}
+          </div>
+          <Button
+            size="lg"
+            className="w-full"
+            disabled={!isFormValid}
+            onClick={handleLogin}
+          >
+            Login
+          </Button>
+        </form>
+      </div>
     </div>
   )
 }

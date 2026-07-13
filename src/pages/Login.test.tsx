@@ -135,6 +135,6 @@ describe('Login form', () => {
     const loginButton = screen.getByRole('button', { name: /login/i })
     await user.click(loginButton)
 
-    expect(screen.getByRole('heading', { name: /welcome/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /profiles/i })).toBeInTheDocument()
   })
 })
