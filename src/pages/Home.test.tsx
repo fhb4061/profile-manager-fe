@@ -1,8 +1,17 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import App from '../App'
+
+vi.mock('react-oidc-context', () => ({
+  useAuth: () => ({
+    isAuthenticated: true,
+    isLoading: false,
+    signinRedirect: vi.fn(),
+    signoutRedirect: vi.fn(),
+  }),
+}))
 
 function renderHome() {
   return render(

@@ -1,29 +1,18 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Input } from '@/components/ui/input'
+import type { Location } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { useAuth } from 'react-oidc-context'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/ui/field'
-import { isValidEmail, isValidPassword } from '@/lib/validation'
 
 export function Login() {
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [emailTouched, setEmailTouched] = useState(false)
-  const [passwordTouched, setPasswordTouched] = useState(false)
-
-  const emailError = emailTouched && !isValidEmail(email)
-  const passwordError = passwordTouched && !isValidPassword(password)
-  const isFormValid = isValidEmail(email) && isValidPassword(password)
+  const auth = useAuth()
+  const location = useLocation()
 
   const handleLogin = () => {
-    navigate('/')
+    const from = (location.state as { from?: Location } | null)?.from
+    const returnTo = from ? `${from.pathname}${from.search}` : undefined
+
+    void auth.signinRedirect(returnTo ? { state: { returnTo } } : undefined)
   }
 
   return (
@@ -38,44 +27,9 @@ export function Login() {
           </p>
         </CardHeader>
         <CardContent>
-          <form>
-            <FieldGroup>
-              <Field data-invalid={emailError || undefined}>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onBlur={() => setEmailTouched(true)}
-                />
-                {emailError && <FieldError>Invalid email</FieldError>}
-              </Field>
-              <Field data-invalid={passwordError || undefined}>
-                <FieldLabel htmlFor="password">Password</FieldLabel>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onBlur={() => setPasswordTouched(true)}
-                />
-                {passwordError && (
-                  <FieldError>Password must be at least 8 characters</FieldError>
-                )}
-              </Field>
-              <Button
-                size="lg"
-                className="w-full"
-                disabled={!isFormValid}
-                onClick={handleLogin}
-              >
-                Login
-              </Button>
-            </FieldGroup>
-          </form>
+          <Button size="lg" className="w-full" onClick={handleLogin}>
+            Log in
+          </Button>
         </CardContent>
       </Card>
     </div>
