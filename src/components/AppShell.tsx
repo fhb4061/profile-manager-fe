@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from 'react-oidc-context'
+import { Button } from '@/components/ui/button'
 
 export function AppShell({ children }: { children: ReactNode }) {
   const auth = useAuth()
@@ -12,8 +13,11 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link to="/" className="font-heading text-sm font-semibold tracking-tight">
             Profile Manager
           </Link>
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
+            className="h-auto p-0 text-xs text-muted-foreground hover:bg-transparent hover:text-foreground"
             onClick={() =>
               void auth.signoutRedirect({
                 // Cognito's logout endpoint isn't standards-compliant OIDC
@@ -30,10 +34,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                 },
               })
             }
-            className="text-xs text-muted-foreground hover:text-foreground"
           >
             Log out
-          </button>
+          </Button>
         </div>
       </header>
       <main className="mx-auto w-full max-w-3xl px-6 py-8">{children}</main>
