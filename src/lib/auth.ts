@@ -1,0 +1,23 @@
+import type { AuthProviderProps } from 'react-oidc-context'
+
+// UserManagerSettings for the Cognito Hosted UI, read from Vite env vars so
+// dev/staging/prod can point at different User Pools without code changes.
+//
+// Token storage intentionally left at oidc-client-ts's default
+// (WebStorageStateStore backed by window.sessionStorage) rather than being
+// overridden here, per spec: session-only, cleared when the tab closes.
+export const oidcConfig: AuthProviderProps = {
+  authority: import.meta.env.VITE_COGNITO_AUTHORITY,
+  client_id: import.meta.env.VITE_COGNITO_CLIENT_ID,
+  redirect_uri: import.meta.env.VITE_COGNITO_REDIRECT_URI,
+  post_logout_redirect_uri: import.meta.env.VITE_COGNITO_POST_LOGOUT_REDIRECT_URI,
+  silent_redirect_uri: import.meta.env.VITE_COGNITO_SILENT_REDIRECT_URI,
+  automaticSilentRenew: true,
+  response_type: 'code',
+  scope: 'openid email profile',
+  onSigninCallback: () => {
+    // Strip the ?code=&state= params Cognito appends after redirecting back,
+    // so they don't linger in the URL or get re-processed on refresh.
+    window.history.replaceState({}, document.title, window.location.pathname)
+  },
+}
