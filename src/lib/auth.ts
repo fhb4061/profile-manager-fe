@@ -1,3 +1,4 @@
+import { UserManager, type UserManagerSettings } from 'oidc-client-ts'
 import type { AuthProviderProps } from 'react-oidc-context'
 
 // UserManagerSettings for the Cognito Hosted UI, read from Vite env vars so
@@ -6,7 +7,7 @@ import type { AuthProviderProps } from 'react-oidc-context'
 // Token storage intentionally left at oidc-client-ts's default
 // (WebStorageStateStore backed by window.sessionStorage) rather than being
 // overridden here, per spec: session-only, cleared when the tab closes.
-export const oidcConfig: AuthProviderProps = {
+const userManagerSettings: UserManagerSettings = {
   authority: import.meta.env.VITE_COGNITO_AUTHORITY,
   client_id: import.meta.env.VITE_COGNITO_CLIENT_ID,
   redirect_uri: import.meta.env.VITE_COGNITO_REDIRECT_URI,
@@ -15,6 +16,15 @@ export const oidcConfig: AuthProviderProps = {
   automaticSilentRenew: true,
   response_type: 'code',
   scope: 'openid email profile',
+}
+
+// Single UserManager instance, shared between AuthProvider (react-oidc-context)
+// and code outside the React tree (e.g. an axios interceptor) that needs to
+// read the current token without going through a hook.
+export const userManager = new UserManager(userManagerSettings)
+
+export const oidcConfig: AuthProviderProps = {
+  userManager,
   onSigninCallback: () => {
     // Strip the ?code=&state= params Cognito appends after redirecting back,
     // so they don't linger in the URL or get re-processed on refresh.

@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly VITE_COGNITO_REDIRECT_URI: string
   readonly VITE_COGNITO_POST_LOGOUT_REDIRECT_URI: string
   readonly VITE_COGNITO_SILENT_REDIRECT_URI: string
+  readonly VITE_API_BASE_URL: string
 }
 
 interface ImportMeta {

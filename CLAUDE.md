@@ -26,3 +26,8 @@ npx vitest run <file>      # run one test file
 - No backend yet — profile data is mocked in `src/lib/profiles.ts`.
 
 Tests sit beside source (`*.test.ts(x)`), Vitest + Testing Library, jsdom.
+
+## Workflow
+
+- Always implement via the `tdd` skill (red → green), even for small changes — don't skip straight to writing code.
+- When given a numbered plan and asked to execute it one-by-one, keep the exact numbering given — don't merge, split, or renumber steps. If two steps seem too coupled to do independently, say so and ask before combining.
