@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { Login } from './pages/Login'
 import { Home } from './pages/Home'
 import { ProfileDetail } from './pages/ProfileDetail'
+import { EditProfile } from './pages/EditProfile'
 import { Callback } from './pages/Callback'
 import { SilentRenew } from './pages/SilentRenew'
 import { ProtectedLayout } from './components/ProtectedLayout'
@@ -14,6 +15,7 @@ function App() {
       <Route path="/silent-renew" element={<SilentRenew />} />
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/profile/edit" element={<EditProfile />} />
         <Route path="/profile/:id" element={<ProfileDetail />} />
       </Route>
     </Routes>
