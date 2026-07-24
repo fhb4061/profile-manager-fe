@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from 'react-oidc-context'
 import { UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Popover,
@@ -24,6 +24,7 @@ function AccountMenu() {
     <Popover>
       <PopoverTrigger aria-label="Account menu">
         <Avatar>
+          {data?.photoUrl && <AvatarImage src={data.photoUrl} alt="" />}
           <AvatarFallback className="bg-primary/10 font-heading font-semibold text-primary">
             {isError || !data ? <UserRound /> : data.initials}
           </AvatarFallback>

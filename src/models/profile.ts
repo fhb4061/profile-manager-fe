@@ -4,6 +4,7 @@ export type Profile = {
     familyName: string;
     initials: string;
     email?: string;
+    photoUrl?: string;
 }
 
 export type Profiles = {

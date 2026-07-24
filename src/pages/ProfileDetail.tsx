@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useAuth } from 'react-oidc-context'
 import { ArrowLeft } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -56,6 +56,7 @@ export function ProfileDetail() {
           <div className="mt-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <Avatar className="size-14">
+                {data.photoUrl && <AvatarImage src={data.photoUrl} alt="" />}
                 <AvatarFallback className="bg-primary/10 font-heading text-lg font-semibold text-primary">
                   {data.initials}
                 </AvatarFallback>
