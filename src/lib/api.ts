@@ -7,8 +7,8 @@ export const api = axios.create({
 
 api.interceptors.request.use(async (config) => {
   const user = await userManager.getUser()
-  if (user?.access_token) {
-    config.headers.Authorization = `Bearer ${user.access_token}`
+  if (user?.id_token) {
+    config.headers.Authorization = `Bearer ${user.id_token}`
   }
   return config
 })
