@@ -7,7 +7,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import './index.css'
 import App from './App.tsx'
 import { oidcConfig } from './lib/auth'
-import { queryClient } from './lib/queryClient'
+import { QueryClient } from '@tanstack/react-query'
+
+export const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

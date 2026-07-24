@@ -29,8 +29,8 @@ describe('api request interceptor', () => {
     mockGetUser.mockReset()
   })
 
-  it('attaches the access token as a Bearer header when a user is signed in', async () => {
-    mockGetUser.mockResolvedValue({ access_token: 'abc123' })
+  it('attaches the id token as a Bearer header when a user is signed in', async () => {
+    mockGetUser.mockResolvedValue({ id_token: 'abc123' })
     const captured = captureRequestConfig()
 
     await api.get('/whoami')

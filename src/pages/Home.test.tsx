@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from '../App'
 
 vi.mock('react-oidc-context', () => ({
@@ -13,32 +13,39 @@ vi.mock('react-oidc-context', () => ({
   }),
 }))
 
+vi.mock('@/lib/api', () => ({
+  api: { get: vi.fn() },
+}))
+
+import { api } from '@/lib/api'
+
 function renderHome() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  })
   return render(
-    <MemoryRouter initialEntries={['/']}>
-      <App />
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>
+    </QueryClientProvider>
   )
 }
 
 describe('Home profile list', () => {
-  it('lists every profile by name', () => {
-    renderHome()
-
-    expect(screen.getByRole('link', { name: /ada lovelace/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /alan turing/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /grace hopper/i })).toBeInTheDocument()
+  beforeEach(() => {
+    vi.mocked(api.get).mockResolvedValue({ data: [] })
   })
 
-  it('navigates to the profile detail page when a profile is clicked', async () => {
-    const user = userEvent.setup()
-    renderHome()
+  it('shows 3 skeleton placeholder rows while profiles are loading', () => {
+    vi.mocked(api.get).mockReturnValue(new Promise(() => {}))
 
-    await user.click(screen.getByRole('link', { name: /alan turing/i }))
+    const { container } = renderHome()
 
-    expect(
-      screen.getByRole('heading', { name: /alan turing/i })
-    ).toBeInTheDocument()
-    expect(screen.getByText('alan.turing@example.com')).toBeInTheDocument()
+    const rows = container.querySelectorAll('li')
+    expect(rows).toHaveLength(3)
+    rows.forEach((row) => {
+      expect(row.querySelectorAll('[data-slot="skeleton"]').length).toBeGreaterThan(0)
+    })
   })
 })

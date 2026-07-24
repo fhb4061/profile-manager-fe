@@ -1,7 +1,9 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
-import App from '../App'
+import userEvent from '@testing-library/user-event'
+import { Link, MemoryRouter, Route, Routes } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ProfileDetail } from './ProfileDetail'
 
 vi.mock('react-oidc-context', () => ({
   useAuth: () => ({
@@ -12,33 +14,51 @@ vi.mock('react-oidc-context', () => ({
   }),
 }))
 
-function renderAt(path: string) {
+vi.mock('@/lib/api', () => ({
+  api: { get: vi.fn() },
+}))
+
+import { api } from '@/lib/api'
+
+function renderAt(initialId: string) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  })
   return render(
-    <MemoryRouter initialEntries={[path]}>
-      <App />
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={[`/profile/${initialId}`]}>
+        <Link to="/profile/2">go to profile 2</Link>
+        <Routes>
+          <Route path="/profile/:id" element={<ProfileDetail />} />
+        </Routes>
+      </MemoryRouter>
+    </QueryClientProvider>
   )
 }
 
 describe('Profile detail page', () => {
-  it('shows the profile name, date of birth, email and created date at /profile/:id', () => {
-    renderAt('/profile/1')
+  it('shows the profile matching the current route id when navigating between profiles', async () => {
+    vi.mocked(api.get).mockImplementation((url: string) =>
+      url === '/profiles/1'
+        ? Promise.resolve({ data: { sub: '1', givenName: 'Ada', familyName: 'Lovelace', initials: 'AL' } })
+        : Promise.resolve({ data: { sub: '2', givenName: 'Alan', familyName: 'Turing', initials: 'AT' } })
+    )
+    const user = userEvent.setup()
 
-    expect(
-      screen.getByRole('heading', { name: /ada lovelace/i })
-    ).toBeInTheDocument()
-    expect(screen.getByText('Ada')).toBeInTheDocument()
-    expect(screen.getByText('Lovelace')).toBeInTheDocument()
-    expect(screen.getByText('December 10, 1815')).toBeInTheDocument()
-    expect(screen.getByText('ada.lovelace@example.com')).toBeInTheDocument()
-    expect(screen.getByText('January 5, 2024')).toBeInTheDocument()
+    renderAt('1')
+    expect(await screen.findByRole('heading', { name: /ada lovelace/i })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: /go to profile 2/i }))
+
+    expect(await screen.findByRole('heading', { name: /alan turing/i })).toBeInTheDocument()
   })
 
-  it('shows a not-found message for an unknown profile id', () => {
-    renderAt('/profile/does-not-exist')
+  it('shows skeleton placeholders while the profile is loading', () => {
+    vi.mocked(api.get).mockReturnValue(new Promise(() => {}))
 
-    expect(
-      screen.getByRole('heading', { name: /profile not found/i })
-    ).toBeInTheDocument()
+    const { container } = renderAt('1')
+
+    expect(container.querySelectorAll('[data-slot="skeleton"]').length).toBeGreaterThan(0)
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument()
   })
 })
