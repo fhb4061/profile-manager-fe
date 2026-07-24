@@ -1,7 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
+import { useAuth } from 'react-oidc-context'
 import { ArrowLeft } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useGetProfile } from '@/hooks/useGetProfile'
@@ -9,7 +11,9 @@ import type { Profile } from '@/models/profile'
 
 export function ProfileDetail() {
   const { id } = useParams();
+  const auth = useAuth();
   const { data, isLoading } = useGetProfile(id);
+  const isOwnProfile = data !== undefined && auth.user?.profile.sub === data.sub;
 
   const getFields = (data: Profile) => [
     { label: 'First name', value: data.givenName },
@@ -49,15 +53,22 @@ export function ProfileDetail() {
 
       {data && !isLoading && (
         <>
-          <div className="mt-4 flex items-center gap-4">
-            <Avatar className="size-14">
-              <AvatarFallback className="bg-primary/10 font-heading text-lg font-semibold text-primary">
-                {data.initials}
-              </AvatarFallback>
-            </Avatar>
-            <h1 className="font-heading text-2xl font-semibold tracking-tight">
-              {data.givenName} {data.familyName}
-            </h1>
+          <div className="mt-4 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <Avatar className="size-14">
+                <AvatarFallback className="bg-primary/10 font-heading text-lg font-semibold text-primary">
+                  {data.initials}
+                </AvatarFallback>
+              </Avatar>
+              <h1 className="font-heading text-2xl font-semibold tracking-tight">
+                {data.givenName} {data.familyName}
+              </h1>
+            </div>
+            {isOwnProfile && (
+              <Button variant="outline" render={<Link to="/profile/edit" />} nativeButton={false}>
+                Edit profile
+              </Button>
+            )}
           </div>
           <Card className="mt-6 py-0">
             <dl className="divide-y">

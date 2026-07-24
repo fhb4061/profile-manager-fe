@@ -66,4 +66,11 @@ describe('App routes', () => {
     renderApp('/')
     expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument()
   })
+
+  it('renders EditProfile component at /profile/edit path when authenticated', () => {
+    authenticated()
+
+    renderApp('/profile/edit')
+    expect(screen.getByRole('heading', { name: /edit profile/i })).toBeInTheDocument()
+  })
 })
