@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react'
 import { useTheme } from './useTheme'
 
 function mockMatchMedia(matches: boolean) {
@@ -14,6 +14,7 @@ function mockMatchMedia(matches: boolean) {
 describe('useTheme', () => {
   beforeEach(() => {
     localStorage.clear()
+    document.documentElement.classList.remove('dark')
   })
 
   it('returns dark when system prefers dark and no stored preference exists', () => {
@@ -31,5 +32,19 @@ describe('useTheme', () => {
     const { result } = renderHook(() => useTheme())
 
     expect(result.current.theme).toBe('light')
+  })
+
+  it('flips the theme, updates the dark class, and persists to localStorage when toggled', () => {
+    mockMatchMedia(false)
+
+    const { result } = renderHook(() => useTheme())
+
+    act(() => {
+      result.current.toggle()
+    })
+
+    expect(result.current.theme).toBe('dark')
+    expect(document.documentElement.classList.contains('dark')).toBe(true)
+    expect(localStorage.getItem('theme')).toBe('dark')
   })
 })

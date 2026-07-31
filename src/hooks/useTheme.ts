@@ -1,3 +1,5 @@
+import { useCallback, useState } from 'react'
+
 const MEDIA_QUERY = '(prefers-color-scheme: dark)'
 const STORAGE_KEY = 'theme'
 
@@ -12,6 +14,21 @@ function getStoredTheme(): Theme | null {
   return stored === 'light' || stored === 'dark' ? stored : null
 }
 
+function applyTheme(theme: Theme) {
+  document.documentElement.classList.toggle('dark', theme === 'dark')
+}
+
 export function useTheme() {
-  return { theme: getStoredTheme() ?? getSystemTheme() }
+  const [theme, setTheme] = useState<Theme>(() => getStoredTheme() ?? getSystemTheme())
+
+  const toggle = useCallback(() => {
+    setTheme((prev) => {
+      const next: Theme = prev === 'dark' ? 'light' : 'dark'
+      localStorage.setItem(STORAGE_KEY, next)
+      applyTheme(next)
+      return next
+    })
+  }, [])
+
+  return { theme, toggle }
 }
