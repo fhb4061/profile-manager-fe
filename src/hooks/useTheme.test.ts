@@ -23,4 +23,13 @@ describe('useTheme', () => {
 
     expect(result.current.theme).toBe('dark')
   })
+
+  it('returns the stored preference instead of the system preference when one exists', () => {
+    mockMatchMedia(true)
+    localStorage.setItem('theme', 'light')
+
+    const { result } = renderHook(() => useTheme())
+
+    expect(result.current.theme).toBe('light')
+  })
 })
