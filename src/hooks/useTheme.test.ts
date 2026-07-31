@@ -35,6 +35,14 @@ describe('useTheme', () => {
     expect(result.current.theme).toBe('dark')
   })
 
+  it('applies the dark class to the document on initial mount, with no toggle called', () => {
+    mockMatchMedia(true)
+
+    renderHook(() => useTheme())
+
+    expect(document.documentElement.classList.contains('dark')).toBe(true)
+  })
+
   it('returns the stored preference instead of the system preference when one exists', () => {
     mockMatchMedia(true)
     localStorage.setItem('theme', 'light')
@@ -68,6 +76,7 @@ describe('useTheme', () => {
       media.triggerChange(true)
     })
     expect(result.current.theme).toBe('dark')
+    expect(document.documentElement.classList.contains('dark')).toBe(true)
 
     act(() => {
       result.current.toggle()

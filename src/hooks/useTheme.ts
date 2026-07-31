@@ -23,6 +23,10 @@ export function useTheme() {
   const hasExplicitChoice = useRef(getStoredTheme() !== null)
 
   useEffect(() => {
+    applyTheme(theme)
+  }, [theme])
+
+  useEffect(() => {
     const mql = window.matchMedia(MEDIA_QUERY)
     const listener = (event: MediaQueryListEvent) => {
       if (hasExplicitChoice.current) {
@@ -39,7 +43,6 @@ export function useTheme() {
     setTheme((prev) => {
       const next: Theme = prev === 'dark' ? 'light' : 'dark'
       localStorage.setItem(STORAGE_KEY, next)
-      applyTheme(next)
       return next
     })
   }, [])
