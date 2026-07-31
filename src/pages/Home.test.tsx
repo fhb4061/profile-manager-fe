@@ -48,4 +48,12 @@ describe('Home profile list', () => {
       expect(row.querySelectorAll('[data-slot="skeleton"]').length).toBeGreaterThan(0)
     })
   })
+
+  it('shows an error message when profiles fail to load', async () => {
+    vi.mocked(api.get).mockRejectedValue(new Error('network error'))
+
+    const { findByRole } = renderHome()
+
+    expect(await findByRole('alert')).toHaveTextContent(/couldn't load profiles/i)
+  })
 })

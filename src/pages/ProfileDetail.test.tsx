@@ -92,4 +92,12 @@ describe('Profile detail page', () => {
     expect(await screen.findByRole('heading', { name: /alan turing/i })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /edit profile/i })).not.toBeInTheDocument()
   })
+
+  it('shows an error message when the profile fails to load', async () => {
+    vi.mocked(api.get).mockRejectedValue(new Error('network error'))
+
+    renderAt('1')
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(/couldn't load profile/i)
+  })
 })

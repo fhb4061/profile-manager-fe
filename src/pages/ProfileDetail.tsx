@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useAuth } from 'react-oidc-context'
 import { ArrowLeft } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -12,7 +13,7 @@ import type { Profile } from '@/models/profile'
 export function ProfileDetail() {
   const { id } = useParams();
   const auth = useAuth();
-  const { data, isLoading } = useGetProfile(id);
+  const { data, isLoading, isError } = useGetProfile(id);
   const isOwnProfile = data !== undefined && auth.user?.profile.sub === data.sub;
 
   const getFields = (data: Profile) => [
@@ -49,6 +50,12 @@ export function ProfileDetail() {
             </dl>
           </Card>
         </>
+      )}
+
+      {isError && (
+        <Alert variant="destructive" className="mt-4">
+          <AlertDescription>Couldn't load profile. Try again.</AlertDescription>
+        </Alert>
       )}
 
       {data && !isLoading && (

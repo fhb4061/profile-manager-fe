@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import { useProfiles } from '@/hooks/useProfiles'
 import { AppShell } from '@/components/AppShell'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export function Home() {
-  const { data, isLoading } = useProfiles()
+  const { data, isLoading, isError } = useProfiles()
 
   return (
     <AppShell>
@@ -18,43 +19,51 @@ export function Home() {
         Browse profiles, or open your own to edit it.
       </p>
 
-      <Card className="mt-6 py-0">
-        {isLoading && (
-          <ul className="divide-y">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <li key={index} className="flex items-center gap-4 px-5 py-4">
-                <Skeleton className="size-10 rounded-full" />
-                <Skeleton className="h-4 w-32" />
-              </li>
-            ))}
-          </ul>
-        )}
+      {isError && (
+        <Alert variant="destructive" className="mt-6">
+          <AlertDescription>Couldn't load profiles. Try again.</AlertDescription>
+        </Alert>
+      )}
 
-        {data && !isLoading && (
-          <ul className="divide-y">
-            {data.items.map((profile) => (
-              <li key={profile.sub}>
-                <Link
-                  to={`/profile/${profile.sub}`}
-                  className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-accent"
-                >
-                  <Avatar size="lg">
-                    <AvatarFallback className="bg-primary/10 font-heading font-semibold text-primary">
-                      {profile.initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">
-                      {profile.givenName} {profile.familyName}
+      {!isError && (
+        <Card className="mt-6 py-0">
+          {isLoading && (
+            <ul className="divide-y">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <li key={index} className="flex items-center gap-4 px-5 py-4">
+                  <Skeleton className="size-10 rounded-full" />
+                  <Skeleton className="h-4 w-32" />
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {data && !isLoading && (
+            <ul className="divide-y">
+              {data.items.map((profile) => (
+                <li key={profile.sub}>
+                  <Link
+                    to={`/profile/${profile.sub}`}
+                    className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-accent"
+                  >
+                    <Avatar size="lg">
+                      <AvatarFallback className="bg-primary/10 font-heading font-semibold text-primary">
+                        {profile.initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium">
+                        {profile.givenName} {profile.familyName}
+                      </span>
                     </span>
-                  </span>
-                  <ChevronRight className="size-4 text-muted-foreground" />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
+                    <ChevronRight className="size-4 text-muted-foreground" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+      )}
     </AppShell>
   )
 }
