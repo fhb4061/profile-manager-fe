@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 const MEDIA_QUERY = '(prefers-color-scheme: dark)'
 const STORAGE_KEY = 'theme'
@@ -20,8 +20,22 @@ function applyTheme(theme: Theme) {
 
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(() => getStoredTheme() ?? getSystemTheme())
+  const hasExplicitChoice = useRef(getStoredTheme() !== null)
+
+  useEffect(() => {
+    const mql = window.matchMedia(MEDIA_QUERY)
+    const listener = (event: MediaQueryListEvent) => {
+      if (hasExplicitChoice.current) {
+        return
+      }
+      setTheme(event.matches ? 'dark' : 'light')
+    }
+    mql.addEventListener('change', listener)
+    return () => mql.removeEventListener('change', listener)
+  }, [])
 
   const toggle = useCallback(() => {
+    hasExplicitChoice.current = true
     setTheme((prev) => {
       const next: Theme = prev === 'dark' ? 'light' : 'dark'
       localStorage.setItem(STORAGE_KEY, next)

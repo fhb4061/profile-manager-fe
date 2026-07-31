@@ -3,12 +3,22 @@ import { renderHook, act } from '@testing-library/react'
 import { useTheme } from './useTheme'
 
 function mockMatchMedia(matches: boolean) {
-  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+  let listener: ((event: { matches: boolean }) => void) | undefined
+  const mql = {
     matches,
-    media: query,
-    addEventListener: vi.fn(),
+    addEventListener: vi.fn((_event: string, cb: (event: { matches: boolean }) => void) => {
+      listener = cb
+    }),
     removeEventListener: vi.fn(),
-  }))
+  }
+  window.matchMedia = vi.fn().mockReturnValue(mql)
+
+  return {
+    triggerChange(newMatches: boolean) {
+      mql.matches = newMatches
+      listener?.({ matches: newMatches })
+    },
+  }
 }
 
 describe('useTheme', () => {
@@ -46,5 +56,27 @@ describe('useTheme', () => {
     expect(result.current.theme).toBe('dark')
     expect(document.documentElement.classList.contains('dark')).toBe(true)
     expect(localStorage.getItem('theme')).toBe('dark')
+  })
+
+  it('tracks system preference changes until an explicit toggle happens, then stops', () => {
+    const media = mockMatchMedia(false)
+
+    const { result } = renderHook(() => useTheme())
+    expect(result.current.theme).toBe('light')
+
+    act(() => {
+      media.triggerChange(true)
+    })
+    expect(result.current.theme).toBe('dark')
+
+    act(() => {
+      result.current.toggle()
+    })
+    expect(result.current.theme).toBe('light')
+
+    act(() => {
+      media.triggerChange(true)
+    })
+    expect(result.current.theme).toBe('light')
   })
 })
