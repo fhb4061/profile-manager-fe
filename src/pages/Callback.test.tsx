@@ -9,6 +9,10 @@ vi.mock('react-oidc-context', () => ({
   useAuth: () => mockUseAuth(),
 }))
 
+vi.mock('@/hooks/useTheme', () => ({
+  useTheme: () => ({ theme: 'light', toggle: vi.fn() }),
+}))
+
 function renderCallback() {
   return render(
     <MemoryRouter initialEntries={['/callback']}>
@@ -23,6 +27,18 @@ function renderCallback() {
 }
 
 describe('Callback page', () => {
+  it('renders a theme toggle', () => {
+    mockUseAuth.mockReturnValue({
+      isLoading: true,
+      isAuthenticated: false,
+      user: undefined,
+    })
+
+    renderCallback()
+
+    expect(screen.getByRole('switch', { name: /toggle dark mode/i })).toBeInTheDocument()
+  })
+
   it('shows a loading state while auth is processing the redirect', () => {
     mockUseAuth.mockReturnValue({
       isLoading: true,

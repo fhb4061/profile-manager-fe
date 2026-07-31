@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { useMyProfile } from '@/hooks/useMyProfile'
 
 function AccountMenu() {
@@ -77,7 +78,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link to="/" className="font-heading text-sm font-semibold tracking-tight">
             Profile Manager
           </Link>
-          <AccountMenu />
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <AccountMenu />
+          </div>
         </div>
       </header>
       <main className="mx-auto w-full max-w-3xl px-6 py-8">{children}</main>

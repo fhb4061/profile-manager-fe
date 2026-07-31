@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { useAuth } from 'react-oidc-context'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 export function Login() {
   const auth = useAuth()
@@ -17,6 +18,7 @@ export function Login() {
 
   return (
     <div className="flex min-h-svh items-center justify-center bg-background p-6">
+      <ThemeToggle className="fixed top-6 right-6" />
       <Card className="w-full max-w-sm">
         <CardHeader>
           <h1 className="font-heading text-2xl font-semibold tracking-tight">
