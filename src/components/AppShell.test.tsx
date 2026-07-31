@@ -17,6 +17,10 @@ vi.mock('@/lib/api', () => ({
   api: { get: vi.fn() },
 }))
 
+vi.mock('@/hooks/useTheme', () => ({
+  useTheme: () => ({ theme: 'light', toggle: vi.fn() }),
+}))
+
 import { api } from '@/lib/api'
 
 function renderShell() {
@@ -35,6 +39,16 @@ function renderShell() {
 }
 
 describe('AppShell account menu', () => {
+  it('renders a theme toggle in the header', () => {
+    vi.mocked(api.get).mockResolvedValue({
+      data: { sub: '1', givenName: 'Ada', familyName: 'Lovelace', initials: 'AL', email: 'ada@example.com' },
+    })
+
+    renderShell()
+
+    expect(screen.getByRole('switch', { name: /toggle dark mode/i })).toBeInTheDocument()
+  })
+
   it('shows a skeleton avatar while the profile is loading', () => {
     vi.mocked(api.get).mockReturnValue(new Promise(() => {}))
 

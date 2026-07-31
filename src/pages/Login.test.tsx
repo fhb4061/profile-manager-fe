@@ -12,9 +12,23 @@ vi.mock('react-oidc-context', () => ({
   }),
 }))
 
+vi.mock('@/hooks/useTheme', () => ({
+  useTheme: () => ({ theme: 'light', toggle: vi.fn() }),
+}))
+
 describe('Login page', () => {
   beforeEach(() => {
     signinRedirect.mockClear()
+  })
+
+  it('renders a theme toggle', () => {
+    render(
+      <MemoryRouter>
+        <Login />
+      </MemoryRouter>
+    )
+
+    expect(screen.getByRole('switch', { name: /toggle dark mode/i })).toBeInTheDocument()
   })
 
   it('renders a single "Log in" button', () => {
