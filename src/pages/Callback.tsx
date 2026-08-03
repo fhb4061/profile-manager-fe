@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'react-oidc-context'
-import { ThemeToggle } from '@/components/ThemeToggle'
 
 // Processes the redirect back from Cognito. Shows a loading state while
 // auth is still working, then navigates to the originally-requested path
@@ -26,7 +25,6 @@ export function Callback() {
 
   return (
     <div className="flex min-h-svh items-center justify-center bg-background p-6">
-      <ThemeToggle className="fixed top-6 right-6" />
       <p className="text-sm text-muted-foreground">Signing you in…</p>
     </div>
   )
