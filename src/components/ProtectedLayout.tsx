@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from 'react-oidc-context'
+import { AppShell } from '@/components/AppShell'
 
 // Single place route protection lives: new protected pages nest under this
 // layout route (see App.tsx) rather than each getting a bespoke guard.
@@ -21,5 +22,9 @@ export function ProtectedLayout() {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  return <Outlet />
+  return (
+    <AppShell>
+      <Outlet />
+    </AppShell>
+  )
 }
