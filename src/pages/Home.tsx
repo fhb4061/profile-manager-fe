@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import { useProfiles } from '@/hooks/useProfiles'
-import { AppShell } from '@/components/AppShell'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card } from '@/components/ui/card'
@@ -11,7 +10,7 @@ export function Home() {
   const { data, isLoading, isError } = useProfiles()
 
   return (
-    <AppShell>
+    <>
       <h1 className="font-heading text-2xl font-semibold tracking-tight">
         Profiles
       </h1>
@@ -64,6 +63,6 @@ export function Home() {
           )}
         </Card>
       )}
-    </AppShell>
+    </>
   )
 }
