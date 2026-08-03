@@ -27,5 +27,5 @@ Tests sit beside source (`*.test.ts(x)`), Vitest + Testing Library, jsdom.
 
 - Always implement via the `tdd` skill (red → green), even for small changes — don't skip straight to writing code.
 - For test-first implementation work, `tdd-implementer` (`.claude/agents/`) can be delegated to — manual invocation only, and it expects seams already agreed with the user before it starts; it won't guess or ask on its own.
-- Before invoking `tdd-implementer`, paste the exact formatted handoff prompt into the conversation so the user can verify it matches what was agreed, then invoke.
+- Before invoking `tdd-implementer`, paste the exact formatted handoff prompt into the conversation, then stop and wait for the user's explicit approval in a separate reply — do not invoke in the same turn as pasting it, even if agreement seems implied by earlier discussion.
 - When given a numbered plan and asked to execute it one-by-one, keep the exact numbering given — don't merge, split, or renumber steps. If two steps seem too coupled to do independently, say so and ask before combining.
