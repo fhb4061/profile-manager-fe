@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
-import { AppShell } from '@/components/AppShell'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -204,7 +203,7 @@ export function EditProfile() {
   const { data, isLoading } = useMyProfile({ photoPoll })
 
   return (
-    <AppShell>
+    <>
       <h1 className="font-heading text-2xl font-semibold tracking-tight">Edit profile</h1>
 
       {isLoading && (
@@ -220,6 +219,6 @@ export function EditProfile() {
           <EditProfileForm profile={data} photoPoll={photoPoll} onPhotoPollChange={setPhotoPoll} />
         </div>
       )}
-    </AppShell>
+    </>
   )
 }

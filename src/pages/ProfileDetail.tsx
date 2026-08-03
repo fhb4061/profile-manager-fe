@@ -1,7 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useAuth } from 'react-oidc-context'
 import { ArrowLeft } from 'lucide-react'
-import { AppShell } from '@/components/AppShell'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -22,7 +21,7 @@ export function ProfileDetail() {
   ]
 
   return (
-    <AppShell>
+    <>
       <Link
         to="/"
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
@@ -93,6 +92,6 @@ export function ProfileDetail() {
           </Card>
         </>
       )}
-    </AppShell>
+    </>
   )
 }

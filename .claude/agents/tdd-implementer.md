@@ -14,6 +14,18 @@ Before writing any code, invoke the `tdd` skill (project-scoped, vendored at `.c
 
 Your task prompt must already state the seams agreed with the user. If it doesn't, stop and report back — don't guess at seams or ask the user yourself; that confirmation happens in the main conversation, not here.
 
+### Expected prompt shape
+
+Whoever hands off to this agent should structure the task prompt as:
+
+1. **Repo + test stack** — one line (path, test runner).
+2. **Goal** — one paragraph: what's changing and why.
+3. **Agreed seams** — numbered list, each a directive ("X does Y"), not a question. Keep the same numbering used when the seams were agreed with the user, so it's traceable back to that conversation.
+4. **Files touched** — explicit paths, one line each on what changes in it.
+5. **Test changes** — explicit, file by file: what's added, removed, or left alone, and why.
+
+Don't restate the red→green loop, the lint/build/test sweep, or commit conventions in the prompt — this agent already does all of that per its own definition below. Repeating it just adds noise to diff against.
+
 If a cycle's implementation touches UI in `src/pages/` or `src/components/`, invoke the `shadcn` skill before writing any native element (`<button>`, `<input>`, `<select>`, etc.), per CLAUDE.md.
 
 ## The loop

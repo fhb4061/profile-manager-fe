@@ -39,7 +39,6 @@ describe('Profile detail page', () => {
       isAuthenticated: true,
       isLoading: false,
       signinRedirect: vi.fn(),
-      signoutRedirect: vi.fn(),
       user: { profile: { sub: '1' } },
     })
   })
