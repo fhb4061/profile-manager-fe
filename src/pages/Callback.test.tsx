@@ -16,7 +16,6 @@ function renderCallback() {
         <Route path="/callback" element={<Callback />} />
         <Route path="/" element={<div>Home page</div>} />
         <Route path="/profile/1" element={<div>Profile 1 page</div>} />
-        <Route path="/login" element={<div>Login page</div>} />
       </Routes>
     </MemoryRouter>
   )
@@ -59,7 +58,7 @@ describe('Callback page', () => {
     expect(await screen.findByText(/profile 1 page/i)).toBeInTheDocument()
   })
 
-  it('redirects to /login when auth fails to complete', async () => {
+  it('redirects to / when auth fails to complete', async () => {
     mockUseAuth.mockReturnValue({
       isLoading: false,
       isAuthenticated: false,
@@ -69,6 +68,6 @@ describe('Callback page', () => {
 
     renderCallback()
 
-    expect(await screen.findByText(/login page/i)).toBeInTheDocument()
+    expect(await screen.findByText(/home page/i)).toBeInTheDocument()
   })
 })

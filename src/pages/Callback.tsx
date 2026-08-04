@@ -15,7 +15,7 @@ export function Callback() {
     }
 
     if (!auth.isAuthenticated) {
-      navigate('/login', { replace: true })
+      navigate('/', { replace: true })
       return
     }
 
