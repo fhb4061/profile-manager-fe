@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import { useAuth } from 'react-oidc-context'
 import { UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -11,6 +10,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { LoginButton } from '@/components/LoginButton'
 import { useMyProfile } from '@/hooks/useMyProfile'
 
 function AccountMenu() {
@@ -70,7 +70,21 @@ function AccountMenu() {
   )
 }
 
-export function AppShell({ children }: { children: ReactNode }) {
+function HeaderAuth() {
+  const auth = useAuth()
+
+  if (auth.isLoading) {
+    return <Skeleton className="size-8 rounded-full" />
+  }
+
+  if (!auth.isAuthenticated) {
+    return <LoginButton />
+  }
+
+  return <AccountMenu />
+}
+
+export function AppShell() {
   return (
     <div className="min-h-svh bg-background">
       <header className="border-b">
@@ -80,11 +94,13 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <AccountMenu />
+            <HeaderAuth />
           </div>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-3xl px-6 py-8">{children}</main>
+      <main className="mx-auto w-full max-w-3xl px-6 py-8">
+        <Outlet />
+      </main>
     </div>
   )
 }
