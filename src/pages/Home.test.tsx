@@ -1,59 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import App from '../App'
+import { describe, it, expect } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { Home } from './Home'
 
-vi.mock('react-oidc-context', () => ({
-  useAuth: () => ({
-    isAuthenticated: true,
-    isLoading: false,
-    signinRedirect: vi.fn(),
-    signoutRedirect: vi.fn(),
-  }),
-}))
+describe('Home landing page', () => {
+  it('shows a public welcome message, without checking auth', () => {
+    render(<Home />)
 
-vi.mock('@/lib/api', () => ({
-  api: { get: vi.fn() },
-}))
-
-import { api } from '@/lib/api'
-
-function renderHome() {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  })
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={['/']}>
-        <App />
-      </MemoryRouter>
-    </QueryClientProvider>
-  )
-}
-
-describe('Home profile list', () => {
-  beforeEach(() => {
-    vi.mocked(api.get).mockResolvedValue({ data: [] })
-  })
-
-  it('shows 3 skeleton placeholder rows while profiles are loading', () => {
-    vi.mocked(api.get).mockReturnValue(new Promise(() => {}))
-
-    const { container } = renderHome()
-
-    const rows = container.querySelectorAll('li')
-    expect(rows).toHaveLength(3)
-    rows.forEach((row) => {
-      expect(row.querySelectorAll('[data-slot="skeleton"]').length).toBeGreaterThan(0)
-    })
-  })
-
-  it('shows an error message when profiles fail to load', async () => {
-    vi.mocked(api.get).mockRejectedValue(new Error('network error'))
-
-    const { findByRole } = renderHome()
-
-    expect(await findByRole('alert')).toHaveTextContent(/couldn't load profiles/i)
+    expect(
+      screen.getByText(/welcome to profile manager\. log in to view and manage your profile\./i)
+    ).toBeInTheDocument()
   })
 })

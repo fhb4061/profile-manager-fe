@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { Login } from './Login'
+import { LoginButton } from './LoginButton'
 
 const signinRedirect = vi.fn()
 
@@ -12,53 +12,26 @@ vi.mock('react-oidc-context', () => ({
   }),
 }))
 
-vi.mock('@/hooks/useTheme', () => ({
-  useTheme: () => ({ theme: 'light', toggle: vi.fn() }),
-}))
-
-describe('Login page', () => {
+describe('LoginButton', () => {
   beforeEach(() => {
     signinRedirect.mockClear()
   })
 
-  it('renders a theme toggle', () => {
+  it('renders a "Log in" button', () => {
     render(
       <MemoryRouter>
-        <Login />
-      </MemoryRouter>
-    )
-
-    expect(screen.getByRole('switch', { name: /toggle dark mode/i })).toBeInTheDocument()
-  })
-
-  it('renders a single "Log in" button', () => {
-    render(
-      <MemoryRouter>
-        <Login />
+        <LoginButton />
       </MemoryRouter>
     )
 
     expect(screen.getByRole('button', { name: /log in/i })).toBeInTheDocument()
   })
 
-  it('calls signinRedirect when the Log in button is clicked', async () => {
+  it('calls signinRedirect with no return state when there is no attempted route', async () => {
     const user = userEvent.setup()
     render(
       <MemoryRouter>
-        <Login />
-      </MemoryRouter>
-    )
-
-    await user.click(screen.getByRole('button', { name: /log in/i }))
-
-    expect(signinRedirect).toHaveBeenCalledTimes(1)
-  })
-
-  it('calls signinRedirect with no return state when arriving at /login directly', async () => {
-    const user = userEvent.setup()
-    render(
-      <MemoryRouter initialEntries={['/login']}>
-        <Login />
+        <LoginButton />
       </MemoryRouter>
     )
 
@@ -73,12 +46,12 @@ describe('Login page', () => {
       <MemoryRouter
         initialEntries={[
           {
-            pathname: '/login',
+            pathname: '/',
             state: { from: { pathname: '/profile/1', search: '' } },
           },
         ]}
       >
-        <Login />
+        <LoginButton />
       </MemoryRouter>
     )
 

@@ -46,25 +46,32 @@ function unauthenticated() {
 }
 
 describe('App routes', () => {
-  it('renders Login component at /login path', () => {
+  it('renders the public landing page at / when unauthenticated', () => {
     unauthenticated()
 
-    renderApp('/login')
-    expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument()
+    renderApp('/')
+    expect(screen.getByText(/welcome to profile manager/i)).toBeInTheDocument()
   })
 
-  it('renders Home component at / path when authenticated', () => {
+  it('renders the public landing page at / when authenticated', () => {
     authenticated()
 
     renderApp('/')
+    expect(screen.getByText(/welcome to profile manager/i)).toBeInTheDocument()
+  })
+
+  it('renders Profiles at /profiles when authenticated', () => {
+    authenticated()
+
+    renderApp('/profiles')
     expect(screen.getByRole('heading', { name: /profiles/i })).toBeInTheDocument()
   })
 
-  it('redirects to /login when visiting / while unauthenticated', () => {
+  it('redirects to / when visiting /profiles while unauthenticated', () => {
     unauthenticated()
 
-    renderApp('/')
-    expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument()
+    renderApp('/profiles')
+    expect(screen.getByText(/welcome to profile manager/i)).toBeInTheDocument()
   })
 
   it('renders EditProfile component at /profile/edit path when authenticated', () => {
