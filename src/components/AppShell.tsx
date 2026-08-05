@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router'
 import { useAuth } from 'react-oidc-context'
 import { UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'

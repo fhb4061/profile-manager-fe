@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { ChevronRight } from 'lucide-react'
 import { useProfiles } from '@/hooks/useProfiles'
 import { Alert, AlertDescription } from '@/components/ui/alert'
