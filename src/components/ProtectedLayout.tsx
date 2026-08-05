@@ -1,4 +1,4 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router'
 import { useAuth } from 'react-oidc-context'
 
 // Single place route protection lives: new protected pages nest under this

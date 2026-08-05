@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router'
 import { useAuth } from 'react-oidc-context'
 import { ArrowLeft } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'

@@ -5,15 +5,23 @@ on:
       branches:
         - master
 
+# Least privilege: this job only reads the repo. Without this the workflow
+# inherits the repository default, which may grant write scopes.
+permissions:
+    contents: read
+
 jobs:
     TestBuild:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
               uses: actions/checkout@v5
-            
+
             - name: Install node
               uses: actions/setup-node@v6
+              with:
+                node-version: 24
+                cache: npm
 
             - name: Install app
               run: npm ci
@@ -26,6 +34,8 @@ jobs:
 
             - name: Test app
               run: npm test
-        
 
-    
+            # Only the shipped dependency tree matters here; build/test tooling
+            # is not attacker-reachable at runtime.
+            - name: Audit production dependencies
+              run: npm audit --omit=dev --audit-level=high
