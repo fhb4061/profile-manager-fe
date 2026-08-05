@@ -7,3 +7,10 @@ Dockerfile
 .pi
 .github
 *.md
+
+# Never let local env files reach the build context: `COPY . .` would pull them
+# in and Vite would inline their values into the shipped bundle. Build-time
+# config comes from --build-arg only (see Dockerfile). Also covers .env.example,
+# which the image has no use for.
+.env
+.env.*
