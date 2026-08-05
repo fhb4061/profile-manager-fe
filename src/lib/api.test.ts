@@ -29,14 +29,34 @@ describe('api request interceptor', () => {
     mockGetUser.mockReset()
   })
 
-  it('attaches the id token as a Bearer header when a user is signed in', async () => {
-    mockGetUser.mockResolvedValue({ id_token: 'abc123' })
+  it('attaches the access token as a Bearer header when a user is signed in', async () => {
+    mockGetUser.mockResolvedValue({ access_token: 'abc123', id_token: 'id-token' })
     const captured = captureRequestConfig()
 
     await api.get('/whoami')
 
     const config = await captured
     expect(config.headers.Authorization).toBe('Bearer abc123')
+  })
+
+  it('never sends the id token, which is proof of authentication and carries PII', async () => {
+    mockGetUser.mockResolvedValue({ access_token: 'access-token', id_token: 'id-token' })
+    const captured = captureRequestConfig()
+
+    await api.get('/whoami')
+
+    const config = await captured
+    expect(config.headers.Authorization).not.toContain('id-token')
+  })
+
+  it('sends no Authorization header for a user that has an id token but no access token', async () => {
+    mockGetUser.mockResolvedValue({ id_token: 'id-token' })
+    const captured = captureRequestConfig()
+
+    await api.get('/whoami')
+
+    const config = await captured
+    expect(config.headers.Authorization).toBeUndefined()
   })
 
   it('sends no Authorization header when there is no signed-in user', async () => {

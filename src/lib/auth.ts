@@ -15,6 +15,11 @@ const userManagerSettings: UserManagerSettings = {
   silent_redirect_uri: import.meta.env.VITE_COGNITO_SILENT_REDIRECT_URI,
   automaticSilentRenew: true,
   response_type: 'code',
+  // Identity scopes only. The API is sent the access token (see lib/api.ts), but
+  // an access token minted from these scopes carries no API-specific permissions.
+  // Once a Cognito resource server exists, add its custom scope(s) here (e.g.
+  // 'profiles/read profiles/write') so the API can do scope-based authorization
+  // instead of treating any valid pool token as fully authorized.
   scope: 'openid email profile',
 }
 
