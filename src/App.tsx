@@ -2,7 +2,6 @@ import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router'
 import { Home } from './pages/Home'
 import { ProfileDetail } from './pages/ProfileDetail'
-import { CameraFeed } from './pages/CameraFeed'
 import { Callback } from './pages/Callback'
 import { SilentRenew } from './pages/SilentRenew'
 import { AppShell } from './components/AppShell'
@@ -12,6 +11,9 @@ import { Skeleton } from './components/ui/skeleton'
 const Profiles = lazy(() => import('./pages/Profiles').then((m) => ({ default: m.Profiles })))
 const EditProfile = lazy(() =>
   import('./pages/EditProfile').then((m) => ({ default: m.EditProfile }))
+)
+const CameraFeed = lazy(() =>
+  import('./pages/CameraFeed').then((m) => ({ default: m.CameraFeed }))
 )
 
 function App() {
