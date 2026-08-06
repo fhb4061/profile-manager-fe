@@ -87,4 +87,22 @@ describe('Camera feed page', () => {
 
     expect(await screen.findByText('Home page')).toBeInTheDocument()
   })
+
+  it('shows a Back button navigating back when there is a prior page in history', async () => {
+    vi.mocked(getCameraStream).mockReturnValue(new Promise(() => {}))
+    const user = userEvent.setup()
+
+    render(
+      <MemoryRouter initialEntries={['/profiles', '/camera']} initialIndex={1}>
+        <Routes>
+          <Route path="/profiles" element={<div>Profiles page</div>} />
+          <Route path="/camera" element={<CameraFeed />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    await user.click(screen.getByRole('button', { name: /back/i }))
+
+    expect(await screen.findByText('Profiles page')).toBeInTheDocument()
+  })
 })
