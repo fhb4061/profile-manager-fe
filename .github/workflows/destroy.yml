@@ -1,0 +1,21 @@
+name: "Destroy"
+
+# Manual-only teardown of this repo's S3+CloudFront stack.
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  site:
+    # OIDC trust is master-only; skip cleanly if dispatched from another branch.
+    if: github.ref == 'refs/heads/master'
+    uses: fhb4061/profile-manager-stacks/.github/workflows/static-site.yml@master
+    with:
+      build-cmd: npm run build
+      dist-dir: dist
+      aws-region: ap-southeast-2
+      action: destroy
+    secrets: inherit
