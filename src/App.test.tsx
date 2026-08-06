@@ -64,11 +64,11 @@ describe('App routes', () => {
     expect(screen.getByText(/welcome to profile manager/i)).toBeInTheDocument()
   })
 
-  it('renders Profiles at /profiles when authenticated', () => {
+  it('renders Profiles at /profiles when authenticated', async () => {
     authenticated()
 
     renderApp('/profiles')
-    expect(screen.getByRole('heading', { name: /profiles/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /profiles/i })).toBeInTheDocument()
   })
 
   it('redirects to / when visiting /profiles while unauthenticated', () => {
