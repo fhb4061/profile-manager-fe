@@ -78,11 +78,11 @@ describe('App routes', () => {
     expect(screen.getByText(/welcome to profile manager/i)).toBeInTheDocument()
   })
 
-  it('renders EditProfile component at /profile/edit path when authenticated', () => {
+  it('renders EditProfile component at /profile/edit path when authenticated', async () => {
     authenticated()
 
     renderApp('/profile/edit')
-    expect(screen.getByRole('heading', { name: /edit profile/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /edit profile/i })).toBeInTheDocument()
   })
 
   it('renders CameraFeed at /camera when unauthenticated', () => {
