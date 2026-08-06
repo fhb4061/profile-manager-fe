@@ -25,4 +25,27 @@ describe('Camera feed page', () => {
 
     expect(container.querySelector('[data-slot="skeleton"]')).toBeInTheDocument()
   })
+
+  it('shows a mirrored, muted video playing the granted camera stream', async () => {
+    const stopTrack = vi.fn()
+    const stream = { getTracks: () => [{ stop: stopTrack }] } as unknown as MediaStream
+    vi.mocked(getCameraStream).mockResolvedValue(stream)
+
+    const { container, unmount } = renderCameraFeed()
+
+    const video = await vi.waitFor(() => {
+      const element = container.querySelector('video')
+      expect(element).toBeInTheDocument()
+      return element as HTMLVideoElement
+    })
+
+    expect(video.muted).toBe(true)
+    expect(video.autoplay).toBe(true)
+    expect(video.style.transform).toBe('scaleX(-1)')
+    expect(video.srcObject).toBe(stream)
+
+    unmount()
+
+    expect(stopTrack).toHaveBeenCalled()
+  })
 })
