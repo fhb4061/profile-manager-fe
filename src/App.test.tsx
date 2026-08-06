@@ -14,6 +14,10 @@ vi.mock('@/lib/api', () => ({
   api: { get: vi.fn().mockResolvedValue({ data: [] }) },
 }))
 
+vi.mock('@/lib/camera', () => ({
+  getCameraStream: vi.fn().mockReturnValue(new Promise(() => {})),
+}))
+
 function renderApp(initialEntry: string) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -79,5 +83,12 @@ describe('App routes', () => {
 
     renderApp('/profile/edit')
     expect(screen.getByRole('heading', { name: /edit profile/i })).toBeInTheDocument()
+  })
+
+  it('renders CameraFeed at /camera when unauthenticated', () => {
+    unauthenticated()
+
+    const { container } = renderApp('/camera')
+    expect(container.querySelector('[data-slot="skeleton"]')).toBeInTheDocument()
   })
 })

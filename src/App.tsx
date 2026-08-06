@@ -3,6 +3,7 @@ import { Home } from './pages/Home'
 import { Profiles } from './pages/Profiles'
 import { ProfileDetail } from './pages/ProfileDetail'
 import { EditProfile } from './pages/EditProfile'
+import { CameraFeed } from './pages/CameraFeed'
 import { Callback } from './pages/Callback'
 import { SilentRenew } from './pages/SilentRenew'
 import { AppShell } from './components/AppShell'
@@ -15,6 +16,7 @@ function App() {
       <Route path="/silent-renew" element={<SilentRenew />} />
       <Route element={<AppShell />}>
         <Route path="/" element={<Home />} />
+        <Route path="/camera" element={<CameraFeed />} />
         <Route element={<ProtectedLayout />}>
           <Route path="/profiles" element={<Profiles />} />
           <Route path="/profile/edit" element={<EditProfile />} />
