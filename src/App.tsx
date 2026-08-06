@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router'
 import { Home } from './pages/Home'
-import { SilentRenew } from './pages/SilentRenew'
 import { AppShell } from './components/AppShell'
 import { ProtectedLayout } from './components/ProtectedLayout'
 import { Skeleton } from './components/ui/skeleton'
@@ -17,6 +16,9 @@ const ProfileDetail = lazy(() =>
   import('./pages/ProfileDetail').then((m) => ({ default: m.ProfileDetail }))
 )
 const Callback = lazy(() => import('./pages/Callback').then((m) => ({ default: m.Callback })))
+const SilentRenew = lazy(() =>
+  import('./pages/SilentRenew').then((m) => ({ default: m.SilentRenew }))
+)
 
 function App() {
   return (
