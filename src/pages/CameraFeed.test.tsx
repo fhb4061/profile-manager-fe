@@ -48,4 +48,15 @@ describe('Camera feed page', () => {
 
     expect(stopTrack).toHaveBeenCalled()
   })
+
+  it('shows an alert about re-enabling camera access when permission is denied', async () => {
+    const error = new DOMException('Permission denied', 'NotAllowedError')
+    vi.mocked(getCameraStream).mockRejectedValue(error)
+
+    const { findByRole } = renderCameraFeed()
+
+    expect(await findByRole('alert')).toHaveTextContent(
+      /camera access.*denied.*site settings/i
+    )
+  })
 })
