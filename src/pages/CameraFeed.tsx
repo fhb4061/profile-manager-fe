@@ -47,6 +47,17 @@ export function CameraFeed() {
     )
   }
 
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <AlertDescription>
+          No camera could be found, or a hardware failure prevented access. Check that a camera
+          is connected and try again.
+        </AlertDescription>
+      </Alert>
+    )
+  }
+
   if (!stream) {
     return <Skeleton className="aspect-video w-full" />
   }

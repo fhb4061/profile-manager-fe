@@ -59,4 +59,13 @@ describe('Camera feed page', () => {
       /camera access.*denied.*site settings/i
     )
   })
+
+  it('shows a distinct alert for other camera errors, like no hardware', async () => {
+    const error = new DOMException('No camera found', 'NotFoundError')
+    vi.mocked(getCameraStream).mockRejectedValue(error)
+
+    const { findByRole } = renderCameraFeed()
+
+    expect(await findByRole('alert')).toHaveTextContent(/no camera|hardware/i)
+  })
 })
