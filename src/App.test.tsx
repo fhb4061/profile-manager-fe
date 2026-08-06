@@ -14,6 +14,10 @@ vi.mock('@/lib/api', () => ({
   api: { get: vi.fn().mockResolvedValue({ data: [] }) },
 }))
 
+vi.mock('@/lib/camera', () => ({
+  getCameraStream: vi.fn().mockReturnValue(new Promise(() => {})),
+}))
+
 function renderApp(initialEntry: string) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -60,11 +64,11 @@ describe('App routes', () => {
     expect(screen.getByText(/welcome to profile manager/i)).toBeInTheDocument()
   })
 
-  it('renders Profiles at /profiles when authenticated', () => {
+  it('renders Profiles at /profiles when authenticated', async () => {
     authenticated()
 
     renderApp('/profiles')
-    expect(screen.getByRole('heading', { name: /profiles/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /profiles/i })).toBeInTheDocument()
   })
 
   it('redirects to / when visiting /profiles while unauthenticated', () => {
@@ -74,10 +78,17 @@ describe('App routes', () => {
     expect(screen.getByText(/welcome to profile manager/i)).toBeInTheDocument()
   })
 
-  it('renders EditProfile component at /profile/edit path when authenticated', () => {
+  it('renders EditProfile component at /profile/edit path when authenticated', async () => {
     authenticated()
 
     renderApp('/profile/edit')
-    expect(screen.getByRole('heading', { name: /edit profile/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /edit profile/i })).toBeInTheDocument()
+  })
+
+  it('renders CameraFeed at /camera when unauthenticated', () => {
+    unauthenticated()
+
+    const { container } = renderApp('/camera')
+    expect(container.querySelector('[data-slot="skeleton"]')).toBeInTheDocument()
   })
 })
