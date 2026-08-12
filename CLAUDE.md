@@ -58,5 +58,3 @@ src/
 ### Test conventions
 - test sit beside source with *.test.{ts|tsx} extension
 - jsdom + Testing Library setup in src/test/setup.ts
-### Deploy
-- Deployed via GH actions to AWS
