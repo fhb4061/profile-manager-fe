@@ -53,4 +53,28 @@ describe('useDraggable', () => {
 
     expect(result.current.position).toEqual({ x: 0, y: 0 })
   })
+
+  it('stops dragging on pointerup and ignores further pointermoves', () => {
+    window.innerWidth = 1000
+    window.innerHeight = 1000
+    const { result } = renderHook(() =>
+      useDraggable({ size: { width: 320, height: 180 }, initialPosition: { x: 100, y: 100 } })
+    )
+
+    act(() => {
+      result.current.onPointerDown({ clientX: 50, clientY: 50 })
+    })
+    act(() => {
+      window.dispatchEvent(new PointerEvent('pointerup'))
+    })
+
+    expect(result.current.isDragging).toBe(false)
+    const positionAfterUp = result.current.position
+
+    act(() => {
+      window.dispatchEvent(new PointerEvent('pointermove', { clientX: 500, clientY: 500 }))
+    })
+
+    expect(result.current.position).toEqual(positionAfterUp)
+  })
 })
