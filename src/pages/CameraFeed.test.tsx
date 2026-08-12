@@ -43,6 +43,7 @@ describe('Camera feed page', () => {
     expect(video.muted).toBe(true)
     expect(video.autoplay).toBe(true)
     expect(video.style.transform).toBe('scaleX(-1)')
+    expect(video.style.position).toBe('fixed')
     expect(video.srcObject).toBe(stream)
 
     unmount()

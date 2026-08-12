@@ -4,6 +4,7 @@ import { getCameraStream } from '@/lib/camera'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
+import { FloatingVideo } from '@/components/FloatingVideo'
 
 export function CameraFeed() {
   const [stream, setStream] = useState<MediaStream | null>(null)
@@ -63,16 +64,7 @@ export function CameraFeed() {
   } else if (!stream) {
     content = <Skeleton className="aspect-video w-full" />
   } else {
-    content = (
-      <video
-        ref={videoRef}
-        muted
-        autoPlay
-        playsInline
-        style={{ transform: 'scaleX(-1)' }}
-        className="aspect-video w-full rounded-md bg-black"
-      />
-    )
+    content = <FloatingVideo videoRef={videoRef} />
   }
 
   return (
