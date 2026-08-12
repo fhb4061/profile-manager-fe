@@ -1,31 +1,60 @@
-Profile Manager frontend: view/list profiles, edit only your own profile details/picture.
+# Project purpose
 
-## Commands
+`profile-manager-fe` is an experimental project that is used to integrate with AWS. This project allows users to sign up, login, view list of profiles, and edit only their own profile.
 
+# Technical Stack
+- Runtime: React 19 + Typescript + Vite
+- Package manager: npm
+- Routing: react-router v8
+- Server state: TanStack Query
+- Component library: shadcn (use /shadcn skill) — style `base-mira`, built on Base UI, NOT Radix: no `asChild`, use `render` prop (see AppShell.tsx)
+- Testing: Vitest
+
+# Commands
+```bash
+npm run dev             # Run dev server
+npm run build           # Build production version of application
+npm run preview         # Previews the production version of the app (must run 'npm run build' first before this)
+npm test                # Runs test
+npm run test:watch      # Runs test in watch mode and never exits
+npm run lint            # Runs linting
 ```
-npm run dev              # dev server
-npm run build             # tsc -b + vite build
-npm run lint               # eslint .
-npm test                   # vitest (watch)
-npx vitest run <file>      # run one test file
+
+# Architecture
+The codebase follows a modular architecture with clear separation of concerns:
+
+## Directories
+```
+src/
+├── components/ui/         # contains ONLY shadcn reusable components
+├── components/            # contains ONLY custom hand-written components
+├── hooks/                 # contains ONLY reusable hooks
+├── lib/                   # contains ONLY helpers or util like functions only
+├── models/                # contains ONLY types for API responses
+├── pages/                 # contains ONLY pages for this project
+├── test/                  # contains ONLY test related setups
 ```
 
-## Architecture
+## Concepts
 
-- Routes defined in `src/App.tsx`; pages in `src/pages/`.
-- `src/components/ui/` = shadcn primitives (`components.json`, style `base-mira`) — add new ones via shadcn conventions.
-- **Before writing any custom or native UI element** (`<button>`, `<input>`, `<label>`, etc.) in `src/pages/` or `src/components/`, invoke the `shadcn` skill to check whether a suitable component already exists — locally in `src/components/ui/` or available in the registry — before building one by hand.
-- `src/lib/` = framework-agnostic helpers.
-- `@/*` path alias → `src/*`.
-- Tailwind v4 via `@tailwindcss/vite`, configured in `src/index.css` (no `tailwind.config`).
-- Auth via Cognito Hosted UI (`react-oidc-context`) — see `src/lib/auth.ts`, `src/components/ProtectedLayout.tsx`.
-- Backend is a real API (`VITE_API_BASE_URL`) — see `src/lib/api.ts` for the axios client and Cognito bearer-token attachment.
-
-Tests sit beside source (`*.test.ts(x)`), Vitest + Testing Library, jsdom.
-
-## Workflow
-
-- Always implement via the `tdd` skill (red → green), even for small changes — don't skip straight to writing code.
-- For test-first implementation work, `tdd-implementer` (`.claude/agents/`) can be delegated to — manual invocation only, and it expects seams already agreed with the user before it starts; it won't guess or ask on its own.
-- Before invoking `tdd-implementer`, paste the exact formatted handoff prompt into the conversation, then stop and wait for the user's explicit approval in a separate reply — do not invoke in the same turn as pasting it, even if agreement seems implied by earlier discussion.
-- When given a numbered plan and asked to execute it one-by-one, keep the exact numbering given — don't merge, split, or renumber steps. If two steps seem too coupled to do independently, say so and ask before combining.
+### Env setup
+- copy .env.example to .env.local with 5 VITE_COGNITO_* vars + VITE_API_BASE_URL
+- App won't run meaningfully without these
+### Auth
+- Cognito Hosted UI via react-oidc-context
+- Anyone touching pages needs to know about src/lib/auth.ts, ProtectedLayout.tsx, silent renew (/silent-renew route, authRecovery.ts)
+### API Client
+- src/lib/api.ts axios with bearer access-token interceptor + 401 silent-renew-and-retry logic
+- not obvious, easy to break
+### Path alias
+- @/* = src/*
+### Tailwind v4
+- via @tailwindcss/vite
+- configured in src/index.css
+- NO tailwind.config
+### Routing
+- routes in src/App.tsx
+- pages lazy-loaded
+### Test conventions
+- test sit beside source with *.test.{ts|tsx} extension
+- jsdom + Testing Library setup in src/test/setup.ts
