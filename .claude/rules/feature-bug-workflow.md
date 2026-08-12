@@ -5,6 +5,7 @@ description: Workflow for feature/bug work only. Not for architectural changes.
 ## Scope
 - Applies: feature and bug work only
 - Does NOT apply: architectural changes (stop and discuss with user first; no defined workflow yet)
+- Trivial exception: single-file cosmetic tweak with no logic/behavior change (e.g. a CSS class) may skip steps 1 AND 3; edit directly, run `npm test && npm run lint`, report; commit only if user asks
 
 ## Process
 1. Discuss & agree on seams before code using /grilling skill to gain a common understanding
