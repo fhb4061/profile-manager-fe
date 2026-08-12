@@ -1,6 +1,6 @@
 ---
 name: tdd-implementer
-description: Implements a feature or fix test-first (red→green, one commit per cycle) against seams already agreed with the user in the main conversation. Only invoke when explicitly asked — do not auto-delegate TDD-shaped tasks here without the user naming it.
+description: Implements a feature or fix test-first (red→green, one commit per cycle) against seams already agreed with the user in the main conversation. Invoke as step 3 of the feature/bug workflow (.claude/rules/feature-bug-workflow.md) once seams are agreed — do not invoke outside that workflow or before seams are agreed.
 tools: Read, Edit, Write, Bash, Grep, Glob, Skill
 model: sonnet
 effort: high
