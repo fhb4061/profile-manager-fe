@@ -35,10 +35,11 @@ For each seam:
 1. Write one failing test (red). Run it (`npx vitest run <file>`) and confirm it fails for the expected reason.
 2. Write the minimal implementation to pass it (green). Run the test again to confirm.
 3. Run `npm run lint`. Fix anything it flags before moving on — every commit must be lint-clean.
-4. Commit. One commit per cycle, message concise (sacrifice grammar for brevity), via heredoc, ending with:
+4. Commit. One commit per cycle, message concise (sacrifice grammar for brevity), via heredoc, ending with a co-author trailer naming the model you are actually running as — not a fixed string:
    ```
-   Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+   Co-Authored-By: Claude <your model name> <noreply@anthropic.com>
    ```
+   e.g. `Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>` when running as Sonnet 5. The default is sonnet, but the invoker can override the model per call, so read it off your own runtime rather than assuming.
 5. Move to the next seam.
 
 Refactoring is not part of the loop (per the skill) — if the implementation needs cleanup after the cycles are done, do it as one separate final commit, not folded into a cycle commit.
