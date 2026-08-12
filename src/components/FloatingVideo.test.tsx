@@ -1,9 +1,22 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, afterEach } from 'vitest'
 import { render } from '@testing-library/react'
 import { createRef } from 'react'
 import { FloatingVideo } from './FloatingVideo'
+import { useDraggable } from '@/hooks/useDraggable'
+
+const { useDraggable: realUseDraggable } =
+  await vi.importActual<typeof import('@/hooks/useDraggable')>('@/hooks/useDraggable')
+
+vi.mock('@/hooks/useDraggable', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/hooks/useDraggable')>()
+  return { ...actual, useDraggable: vi.fn(actual.useDraggable) }
+})
 
 describe('FloatingVideo', () => {
+  afterEach(() => {
+    vi.mocked(useDraggable).mockImplementation(realUseDraggable)
+  })
+
   it('renders a mirrored, muted video element wired to the given ref', () => {
     const ref = createRef<HTMLVideoElement>()
 
@@ -30,5 +43,19 @@ describe('FloatingVideo', () => {
     expect(video.style.width).toBe('320px')
     expect(video.style.height).toBe('180px')
     expect(video.style.cursor).toBe('grab')
+  })
+
+  it('switches to a grabbing cursor while dragging', () => {
+    vi.mocked(useDraggable).mockReturnValue({
+      position: { x: 0, y: 0 },
+      isDragging: true,
+      onPointerDown: vi.fn(),
+    })
+    const ref = createRef<HTMLVideoElement>()
+
+    const { container } = render(<FloatingVideo videoRef={ref} />)
+    const video = container.querySelector('video') as HTMLVideoElement
+
+    expect(video.style.cursor).toBe('grabbing')
   })
 })
