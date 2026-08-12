@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc -b",
     "preview": "vite preview",
+    "prepare": "git config core.hooksPath .githooks",
     "test": "vitest run",
     "test:watch": "vitest"
   },

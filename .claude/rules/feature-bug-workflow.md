@@ -7,7 +7,7 @@ description: Workflow for feature/bug work only. Not for architectural changes.
 - Does NOT apply: architectural changes (stop and discuss with user first; no defined workflow yet)
 
 ## Path gate
-Trivial iff BOTH:
+Trivial if BOTH:
 1. no test would meaningfully change (no red→green test could be written)
 2. no un-verifiable behaviour risk — existing checks (test/lint/typecheck) prove nothing broke
 
