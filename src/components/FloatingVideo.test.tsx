@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import { createRef } from 'react'
 import { FloatingVideo } from './FloatingVideo'
 import { useDraggable } from '@/hooks/useDraggable'
@@ -30,7 +30,7 @@ describe('FloatingVideo', () => {
     expect(ref.current).toBe(video)
   })
 
-  it('positions itself fixed, top-middle of the viewport, with a grab cursor', () => {
+  it('positions itself fixed, top-middle of the body below the header, with a grab cursor', () => {
     window.innerWidth = 1000
     const ref = createRef<HTMLVideoElement>()
 
@@ -39,10 +39,24 @@ describe('FloatingVideo', () => {
 
     expect(video.style.position).toBe('fixed')
     expect(video.style.left).toBe('340px')
-    expect(video.style.top).toBe('16px')
+    expect(video.style.top).toBe('73px')
     expect(video.style.width).toBe('320px')
     expect(video.style.height).toBe('180px')
     expect(video.style.cursor).toBe('grab')
+  })
+
+  it('stops dragging upward at the header bottom edge', () => {
+    window.innerWidth = 1000
+    window.innerHeight = 1000
+    const ref = createRef<HTMLVideoElement>()
+
+    const { container } = render(<FloatingVideo videoRef={ref} />)
+    const video = container.querySelector('video') as HTMLVideoElement
+
+    fireEvent.pointerDown(video, { clientX: 0, clientY: 0 })
+    fireEvent.pointerMove(window, { clientX: 0, clientY: -10000 })
+
+    expect(video.style.top).toBe('57px')
   })
 
   it('switches to a grabbing cursor while dragging', () => {
