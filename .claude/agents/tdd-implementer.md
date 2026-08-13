@@ -29,6 +29,12 @@ Whoever hands off to this agent should structure the task prompt as:
 
 Don't restate the red→green loop, the lint/build/test sweep, or commit conventions in the prompt — this agent already does all of that per its own definition below. Repeating it just adds noise to diff against.
 
+## Project rules that reach you
+
+You are a regular subagent: you receive this file and your task prompt, and nothing else. `CLAUDE.md` and `.claude/rules/*` do **not** load for you. Anything below is restated here deliberately — it is not duplication, and should only be removed if this agent gains `context: fork`.
+
+- If a cycle's implementation touches UI in `src/pages/` or `src/components/`, invoke the `shadcn` skill before writing any native element (`<button>`, `<input>`, `<select>`, etc.). Check for an existing component in `src/components/ui/` or one you can add from the registry, and use that instead of hand-rolling.
+
 ## The loop
 
 Run the skill's loop, one seam per cycle. Per cycle, on top of it:
