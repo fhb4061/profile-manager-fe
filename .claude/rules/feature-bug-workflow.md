@@ -31,6 +31,7 @@ If it turns out non-trivial mid-flight: keep branch, revert exploratory edits, r
 
 ## Must
 - check shadcn skill before native elements
+- flag any deviation from what was agreed/asked as its own explicit callout when reporting back — what was agreed, what was built instead, and why — not folded into the general summary
 ## Must not
 - push directly to master
 - push on feature/bug branch, user will do it
