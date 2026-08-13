@@ -10,11 +10,15 @@ import {
 } from '@/components/ui/breadcrumb'
 import { useBreadcrumbTrail } from '@/components/BreadcrumbTrailContext'
 import { useProfiles } from '@/hooks/useProfiles'
-import { getCrumbLabel } from '@/lib/breadcrumbLabels'
+import { getCrumbLabel, isProfileDetailPath } from '@/lib/breadcrumbLabels'
 
 export function Breadcrumbs() {
   const trail = useBreadcrumbTrail()
-  const { data } = useProfiles()
+  // Only fetch the profiles list when a crumb actually needs it, so pages
+  // without a /profile/:id crumb don't trigger a network request just to
+  // render a breadcrumb trail.
+  const needsProfileLookup = trail.some(isProfileDetailPath)
+  const { data } = useProfiles({ enabled: needsProfileLookup })
 
   return (
     <Breadcrumb>

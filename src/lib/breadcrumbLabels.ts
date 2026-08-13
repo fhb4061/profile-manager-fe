@@ -15,11 +15,16 @@ export function getCrumbLabel(path: string, profiles?: Profile[]): string {
     return STATIC_LABELS[path]
   }
 
-  if (path.startsWith(PROFILE_PATH_PREFIX)) {
+  if (isProfileDetailPath(path)) {
     const id = path.slice(PROFILE_PATH_PREFIX.length)
     const profile = profiles?.find((candidate) => candidate.sub === id)
     return profile?.givenName ?? PROFILE_PLACEHOLDER_LABEL
   }
 
   return path
+}
+
+/** True for /profile/:id routes, which need a profiles lookup to label; false for the static /profile/edit route. */
+export function isProfileDetailPath(path: string): boolean {
+  return path.startsWith(PROFILE_PATH_PREFIX) && !(path in STATIC_LABELS)
 }

@@ -86,6 +86,18 @@ describe('AppShell', () => {
     expect(screen.getByRole('switch', { name: /toggle dark mode/i })).toBeInTheDocument()
   })
 
+  it('shows a Home breadcrumb linking to / in place of the old Profile Manager link', () => {
+    loggedIn()
+    vi.mocked(api.get).mockResolvedValue({
+      data: { sub: '1', givenName: 'Ada', familyName: 'Lovelace', initials: 'AL', email: 'ada@example.com' },
+    })
+
+    renderShell()
+
+    expect(screen.getByText('Home')).toHaveAttribute('aria-current', 'page')
+    expect(screen.queryByText('Profile Manager')).not.toBeInTheDocument()
+  })
+
   describe('while auth is initializing', () => {
     it('shows a skeleton avatar', () => {
       loading()

@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/popover'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { LoginButton } from '@/components/LoginButton'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { BreadcrumbTrailProvider } from '@/components/BreadcrumbTrailContext'
 import { useMyProfile } from '@/hooks/useMyProfile'
 
 function AccountMenu() {
@@ -86,21 +88,21 @@ function HeaderAuth() {
 
 export function AppShell() {
   return (
-    <div className="min-h-svh bg-background">
-      <header className="border-b">
-        <div className="mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-6">
-          <Link to="/" className="font-heading text-sm font-semibold tracking-tight">
-            Profile Manager
-          </Link>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <HeaderAuth />
+    <BreadcrumbTrailProvider>
+      <div className="min-h-svh bg-background">
+        <header className="border-b">
+          <div className="mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-6">
+            <Breadcrumbs />
+            <div className="flex items-center gap-4">
+              <ThemeToggle />
+              <HeaderAuth />
+            </div>
           </div>
-        </div>
-      </header>
-      <main className="mx-auto w-full max-w-3xl px-6 py-8">
-        <Outlet />
-      </main>
-    </div>
+        </header>
+        <main className="mx-auto w-full max-w-3xl px-6 py-8">
+          <Outlet />
+        </main>
+      </div>
+    </BreadcrumbTrailProvider>
   )
 }
