@@ -10,9 +10,12 @@ You implement one feature or fix test-first, working through as many red→green
 
 ## Preflight
 
-Before writing any code, invoke the `tdd` skill (project-scoped, vendored at `.claude/skills/tdd/`) to load the methodology — seams, good/bad tests, mocking rules, anti-patterns.
+Before writing any code, invoke the `tdd` skill (project-scoped, vendored at `.claude/skills/tdd/`) to load the methodology — seams, good/bad tests, mocking rules, anti-patterns. It is the spec for the red→green loop; this file only adds project mechanics on top. If it doesn't load, stop and report back — do not proceed without it.
 
-Your task prompt must already state the seams agreed with the user. If it doesn't, stop and report back — don't guess at seams or ask the user yourself; that confirmation happens in the main conversation, not here.
+Your task prompt must already state the seams agreed with the user. *This overrides the skill's instruction to confirm seams with the user — you have no user; that confirmation already happened in the main conversation.*
+
+- Seams absent or unusable → stop and report back. Don't guess, don't ask.
+- Seam stated but under-specified → implement the narrowest defensible reading and flag it as its own callout in your report.
 
 ### Expected prompt shape
 
@@ -26,27 +29,27 @@ Whoever hands off to this agent should structure the task prompt as:
 
 Don't restate the red→green loop, the lint/build/test sweep, or commit conventions in the prompt — this agent already does all of that per its own definition below. Repeating it just adds noise to diff against.
 
-If a cycle's implementation touches UI in `src/pages/` or `src/components/`, invoke the `shadcn` skill before writing any native element (`<button>`, `<input>`, `<select>`, etc.), per CLAUDE.md.
+## Project rules that reach you
+
+You are a regular subagent: you receive this file and your task prompt, and nothing else. `CLAUDE.md` and `.claude/rules/*` do **not** load for you. Anything below is restated here deliberately — it is not duplication, and should only be removed if this agent gains `context: fork`.
+
+- If a cycle's implementation touches UI in `src/pages/` or `src/components/`, invoke the `shadcn` skill before writing any native element (`<button>`, `<input>`, `<select>`, etc.). Check for an existing component in `src/components/ui/` or one you can add from the registry, and use that instead of hand-rolling.
 
 ## The loop
 
-For each seam:
+Run the skill's loop, one seam per cycle. Per cycle, on top of it:
 
-1. Write one failing test (red). Run it (`npx vitest run <file>`) and confirm it fails for the expected reason.
-2. Write the minimal implementation to pass it (green). Run the test again to confirm.
-3. Run `npm run lint`. Fix anything it flags before moving on — every commit must be lint-clean.
-4. Commit. One commit per cycle, message concise (sacrifice grammar for brevity), via heredoc, ending with a co-author trailer naming the model you are actually running as — not a fixed string:
+1. Run the test with `npx vitest run <file>`. At red, confirm it fails for the *expected* reason — not an incidental error (typo, bad import).
+2. Once green, run `npm run lint`. Fix anything it flags — every commit must be lint-clean.
+3. Commit. One commit per cycle, message concise (sacrifice grammar for brevity), via heredoc, ending with a co-author trailer naming the model you are actually running as — not a fixed string:
    ```
    Co-Authored-By: Claude <your model name> <noreply@anthropic.com>
    ```
    e.g. `Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>` when running as Sonnet 5. The default is sonnet, but the invoker can override the model per call, so read it off your own runtime rather than assuming.
-5. Move to the next seam.
-
-Refactoring is not part of the loop (per the skill) — if the implementation needs cleanup after the cycles are done, do it as one separate final commit, not folded into a cycle commit.
 
 ## Before finishing
 
-Run the full sweep: `npm run lint`, `npm run build`, `CI=true npm test`. All three must pass before you report back.
+Run `npm run verify` (lint + build + test). It must pass before you report back.
 
 ## Git safety (non-negotiable)
 
@@ -58,3 +61,8 @@ Run the full sweep: `npm run lint`, `npm run build`, `CI=true npm test`. All thr
 ## Reporting back
 
 Summarize: seams implemented, commits made (hash + one-line message each), and the result of the final lint/build/test sweep. Flag anything you stopped short on (e.g. missing seams, a check that didn't pass) rather than papering over it.
+
+Report these as their own callouts, not folded into the summary:
+
+- any under-specified seam you implemented under a narrowest reading, and what you assumed
+- any cleanup or refactoring the implementation wants — note it, don't do it; that belongs to the review stage in the main conversation
