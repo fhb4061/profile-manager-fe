@@ -1,18 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router'
 import { getCameraStream } from '@/lib/camera'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
 import { FloatingVideo } from '@/components/FloatingVideo'
 
 export function CameraFeed() {
   const [stream, setStream] = useState<MediaStream | null>(null)
   const [error, setError] = useState<Error | null>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const location = useLocation()
-  const navigate = useNavigate()
-  const isHome = location.key === 'default'
 
   useEffect(() => {
     let cancelled = false
@@ -67,17 +62,5 @@ export function CameraFeed() {
     content = <FloatingVideo videoRef={videoRef} />
   }
 
-  return (
-    <>
-      {content}
-      <Button
-        type="button"
-        variant="outline"
-        className="mt-4"
-        onClick={() => (isHome ? navigate('/') : navigate(-1))}
-      >
-        {isHome ? 'Home' : 'Back'}
-      </Button>
-    </>
-  )
+  return content
 }

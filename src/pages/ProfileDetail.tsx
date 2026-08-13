@@ -1,6 +1,5 @@
 import { Link, useParams } from 'react-router'
 import { useAuth } from 'react-oidc-context'
-import { ArrowLeft } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -22,13 +21,6 @@ export function ProfileDetail() {
 
   return (
     <>
-      <Link
-        to="/"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" /> Back to profiles
-      </Link>
-
       {isLoading && (
         <>
           <div className="mt-4 flex items-center gap-4">

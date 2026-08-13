@@ -20,6 +20,9 @@ npm run test:watch      # Runs test in watch mode and never exits
 npm run lint            # Runs linting
 ```
 
+# Must not
+- start the dev server or open a browser to verify UI/frontend changes — user verifies visually themselves
+
 # Architecture
 The codebase follows a modular architecture with clear separation of concerns:
 

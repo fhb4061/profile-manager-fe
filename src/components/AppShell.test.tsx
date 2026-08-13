@@ -23,16 +23,17 @@ vi.mock('@/hooks/useTheme', () => ({
 
 import { api } from '@/lib/api'
 
-function renderShell() {
+function renderShell(initialPath = '/') {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   })
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter>
+      <MemoryRouter initialEntries={[initialPath]}>
         <Routes>
           <Route element={<AppShell />}>
             <Route path="/" element={<div>content</div>} />
+            <Route path="/camera" element={<div>camera content</div>} />
           </Route>
         </Routes>
       </MemoryRouter>
@@ -84,6 +85,29 @@ describe('AppShell', () => {
 
     expect(screen.getByText('content')).toBeInTheDocument()
     expect(screen.getByRole('switch', { name: /toggle dark mode/i })).toBeInTheDocument()
+  })
+
+  it('shows a Home breadcrumb linking to / in place of the old Profile Manager link', () => {
+    loggedIn()
+    vi.mocked(api.get).mockResolvedValue({
+      data: { sub: '1', givenName: 'Ada', familyName: 'Lovelace', initials: 'AL', email: 'ada@example.com' },
+    })
+
+    renderShell()
+
+    expect(screen.getByText('Home')).toHaveAttribute('aria-current', 'page')
+    expect(screen.queryByText('Profile Manager')).not.toBeInTheDocument()
+  })
+
+  it('shows a persistent Home icon link to / even on a fresh load of a non-Home page', () => {
+    loggedIn()
+    vi.mocked(api.get).mockResolvedValue({
+      data: { sub: '1', givenName: 'Ada', familyName: 'Lovelace', initials: 'AL', email: 'ada@example.com' },
+    })
+
+    renderShell('/camera')
+
+    expect(screen.getByRole('link', { name: /home/i })).toHaveAttribute('href', '/')
   })
 
   describe('while auth is initializing', () => {

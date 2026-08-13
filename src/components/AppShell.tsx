@@ -1,6 +1,6 @@
 import { Link, Outlet } from 'react-router'
 import { useAuth } from 'react-oidc-context'
-import { UserRound } from 'lucide-react'
+import { Home, UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/popover'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { LoginButton } from '@/components/LoginButton'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { BreadcrumbTrailProvider } from '@/components/BreadcrumbTrailContext'
 import { useMyProfile } from '@/hooks/useMyProfile'
 
 function AccountMenu() {
@@ -86,21 +88,26 @@ function HeaderAuth() {
 
 export function AppShell() {
   return (
-    <div className="min-h-svh bg-background">
-      <header className="border-b">
-        <div className="mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-6">
-          <Link to="/" className="font-heading text-sm font-semibold tracking-tight">
-            Profile Manager
-          </Link>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <HeaderAuth />
+    <BreadcrumbTrailProvider>
+      <div className="min-h-svh bg-background">
+        <header className="border-b">
+          <div className="flex h-14 w-full items-center justify-between px-6">
+            <div className="flex items-center gap-2">
+              <Link to="/" aria-label="Home" className="text-muted-foreground hover:text-foreground">
+                <Home className="size-4" />
+              </Link>
+              <Breadcrumbs />
+            </div>
+            <div className="flex items-center gap-4">
+              <ThemeToggle />
+              <HeaderAuth />
+            </div>
           </div>
-        </div>
-      </header>
-      <main className="mx-auto w-full max-w-3xl px-6 py-8">
-        <Outlet />
-      </main>
-    </div>
+        </header>
+        <main className="mx-auto w-full max-w-3xl px-6 py-8">
+          <Outlet />
+        </main>
+      </div>
+    </BreadcrumbTrailProvider>
   )
 }
