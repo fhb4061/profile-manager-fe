@@ -99,4 +99,12 @@ describe('Profile detail page', () => {
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/couldn't load profile/i)
   })
+
+  it('does not render a Back to profiles link (navigation now lives in the breadcrumb trail)', () => {
+    vi.mocked(api.get).mockReturnValue(new Promise(() => {}))
+
+    renderAt('1')
+
+    expect(screen.queryByRole('link', { name: /back to profiles/i })).not.toBeInTheDocument()
+  })
 })
