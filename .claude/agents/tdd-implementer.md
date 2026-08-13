@@ -29,8 +29,6 @@ Whoever hands off to this agent should structure the task prompt as:
 
 Don't restate the red→green loop, the lint/build/test sweep, or commit conventions in the prompt — this agent already does all of that per its own definition below. Repeating it just adds noise to diff against.
 
-If a cycle's implementation touches UI in `src/pages/` or `src/components/`, invoke the `shadcn` skill before writing any native element (`<button>`, `<input>`, `<select>`, etc.), per CLAUDE.md.
-
 ## The loop
 
 Run the skill's loop, one seam per cycle. Per cycle, on top of it:
@@ -45,7 +43,7 @@ Run the skill's loop, one seam per cycle. Per cycle, on top of it:
 
 ## Before finishing
 
-Run the full sweep: `npm run lint`, `npm run build`, `CI=true npm test`. All three must pass before you report back.
+Run `npm run verify` (lint + build + test). It must pass before you report back.
 
 ## Git safety (non-negotiable)
 

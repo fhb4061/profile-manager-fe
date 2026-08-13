@@ -18,7 +18,11 @@ npm run preview         # Previews the production version of the app (must run '
 npm test                # Runs test
 npm run test:watch      # Runs test in watch mode and never exits
 npm run lint            # Runs linting
+npm run verify          # Full sweep: lint + build + test. Canonical pre-report check
 ```
+
+# Must
+- check the `shadcn` skill before writing any native element (`<button>`, `<input>`, `<select>`, etc.) in `src/pages/` or `src/components/`
 
 # Must not
 - start the dev server or open a browser to verify UI/frontend changes — user verifies visually themselves
