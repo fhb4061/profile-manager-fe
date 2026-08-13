@@ -1,6 +1,6 @@
 import { Link, Outlet } from 'react-router'
 import { useAuth } from 'react-oidc-context'
-import { UserRound } from 'lucide-react'
+import { Home, UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -92,7 +92,12 @@ export function AppShell() {
       <div className="min-h-svh bg-background">
         <header className="border-b">
           <div className="mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-6">
-            <Breadcrumbs />
+            <div className="flex items-center gap-2">
+              <Link to="/" aria-label="Home" className="text-muted-foreground hover:text-foreground">
+                <Home className="size-4" />
+              </Link>
+              <Breadcrumbs />
+            </div>
             <div className="flex items-center gap-4">
               <ThemeToggle />
               <HeaderAuth />
