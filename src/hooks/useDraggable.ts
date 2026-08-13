@@ -13,14 +13,15 @@ interface Position {
 interface UseDraggableOptions {
   size: Size
   initialPosition: Position
+  minY?: number
 }
 
-function clamp(value: number, max: number): number {
-  const upperBound = Math.max(max, 0)
-  return Math.min(Math.max(value, 0), upperBound)
+function clamp(value: number, min: number, max: number): number {
+  const upperBound = Math.max(max, min)
+  return Math.min(Math.max(value, min), upperBound)
 }
 
-export function useDraggable({ size, initialPosition }: UseDraggableOptions) {
+export function useDraggable({ size, initialPosition, minY = 0 }: UseDraggableOptions) {
   const [position, setPosition] = useState<Position>(initialPosition)
   const [isDragging, setIsDragging] = useState(false)
   const lastPointer = useRef<Position>({ x: 0, y: 0 })
@@ -41,8 +42,8 @@ export function useDraggable({ size, initialPosition }: UseDraggableOptions) {
       lastPointer.current = { x: event.clientX, y: event.clientY }
 
       setPosition((prev) => ({
-        x: clamp(prev.x + deltaX, window.innerWidth - size.width),
-        y: clamp(prev.y + deltaY, window.innerHeight - size.height),
+        x: clamp(prev.x + deltaX, 0, window.innerWidth - size.width),
+        y: clamp(prev.y + deltaY, minY, window.innerHeight - size.height),
       }))
     }
 
@@ -56,7 +57,7 @@ export function useDraggable({ size, initialPosition }: UseDraggableOptions) {
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('pointerup', handlePointerUp)
     }
-  }, [isDragging, size.width, size.height])
+  }, [isDragging, size.width, size.height, minY])
 
   return { position, isDragging, onPointerDown }
 }
