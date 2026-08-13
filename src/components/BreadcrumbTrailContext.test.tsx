@@ -45,4 +45,15 @@ describe('BreadcrumbTrailContext', () => {
 
     expect(screen.getByTestId('trail')).toHaveTextContent('/,/camera')
   })
+
+  it('truncates the trail back to a path revisited via navigation', async () => {
+    const user = userEvent.setup()
+    renderAt('/')
+
+    await user.click(screen.getByRole('link', { name: 'camera' }))
+    await user.click(screen.getByRole('link', { name: 'profiles' }))
+    await user.click(screen.getByRole('link', { name: 'camera' }))
+
+    expect(screen.getByTestId('trail')).toHaveTextContent('/,/camera')
+  })
 })
