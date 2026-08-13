@@ -16,6 +16,8 @@ Unsure = standard. No size or file-count cap.
 Announce classification in one line, then proceed (do not wait for ack).
 If it turns out non-trivial mid-flight: keep branch, revert exploratory edits, re-grill, hand to tdd-implementer.
 
+asdf
+
 ## Standard path (default)
 1. Discuss & agree on seams before code using /grilling skill to gain a common understanding. Applies every round a design/seam gets discussed, not just the first pass on a new feature — a follow-up fix to already-agreed work still needs this. End with a consolidated summary of the full agreed design and an explicit go-ahead before moving to step 3; answering individual clarifying questions in isolation does not substitute for this.
 2. Branch off master `<type>/<short-name>`
