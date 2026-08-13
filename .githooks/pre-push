@@ -1,4 +1,4 @@
 #!/bin/sh
 # Backstop for .claude/rules/feature-bug-workflow.md verify step.
 # Mirrors it exactly — nothing leaves the machine unverified.
-npm test && npm run lint && npm run typecheck
+npm run verify
