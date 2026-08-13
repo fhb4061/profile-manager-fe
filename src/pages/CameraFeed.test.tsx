@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { MemoryRouter, Route, Routes } from 'react-router'
+import { MemoryRouter } from 'react-router'
 import { CameraFeed } from './CameraFeed'
 
 vi.mock('@/lib/camera', () => ({
@@ -71,39 +70,12 @@ describe('Camera feed page', () => {
     expect(await findByRole('alert')).toHaveTextContent(/no camera|hardware/i)
   })
 
-  it('shows a Home button navigating to / when there is no prior page in history', async () => {
+  it('does not render a Home or Back navigation button (navigation now lives in the breadcrumb trail)', () => {
     vi.mocked(getCameraStream).mockReturnValue(new Promise(() => {}))
-    const user = userEvent.setup()
 
-    render(
-      <MemoryRouter initialEntries={['/camera']}>
-        <Routes>
-          <Route path="/" element={<div>Home page</div>} />
-          <Route path="/camera" element={<CameraFeed />} />
-        </Routes>
-      </MemoryRouter>
-    )
+    renderCameraFeed()
 
-    await user.click(screen.getByRole('button', { name: /home/i }))
-
-    expect(await screen.findByText('Home page')).toBeInTheDocument()
-  })
-
-  it('shows a Back button navigating back when there is a prior page in history', async () => {
-    vi.mocked(getCameraStream).mockReturnValue(new Promise(() => {}))
-    const user = userEvent.setup()
-
-    render(
-      <MemoryRouter initialEntries={['/profiles', '/camera']} initialIndex={1}>
-        <Routes>
-          <Route path="/profiles" element={<div>Profiles page</div>} />
-          <Route path="/camera" element={<CameraFeed />} />
-        </Routes>
-      </MemoryRouter>
-    )
-
-    await user.click(screen.getByRole('button', { name: /back/i }))
-
-    expect(await screen.findByText('Profiles page')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /home/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /back/i })).not.toBeInTheDocument()
   })
 })
