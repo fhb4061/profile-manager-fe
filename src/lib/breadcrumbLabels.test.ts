@@ -15,4 +15,9 @@ describe('getCrumbLabel', () => {
     ]
     expect(getCrumbLabel('/profile/abc', profiles)).toBe('Ada')
   })
+
+  it('returns a placeholder for a /profile/:id route when the profile is not (yet) found', () => {
+    expect(getCrumbLabel('/profile/abc', undefined)).toBe('Profile')
+    expect(getCrumbLabel('/profile/abc', [])).toBe('Profile')
+  })
 })
