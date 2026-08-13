@@ -18,6 +18,7 @@ function TestNav() {
       <Link to="/">home</Link>
       <Link to="/camera">camera</Link>
       <Link to="/profiles">profiles</Link>
+      <Link to="/profile/abc">profile abc</Link>
     </>
   )
 }
@@ -51,5 +52,17 @@ describe('Breadcrumbs', () => {
     expect(screen.getByRole('link', { name: 'Camera' })).toHaveAttribute('href', '/camera')
     expect(screen.getByText('Profiles')).not.toHaveAttribute('href')
     expect(screen.getByText('Profiles')).toHaveAttribute('aria-current', 'page')
+  })
+
+  it("resolves a /profile/:id crumb to the profile's given name once profiles load", async () => {
+    vi.mocked(api.get).mockResolvedValue({
+      data: { items: [{ sub: 'abc', givenName: 'Ada', familyName: 'Lovelace', initials: 'AL' }] },
+    })
+    const user = userEvent.setup()
+
+    renderAt('/')
+    await user.click(screen.getByRole('link', { name: 'profile abc' }))
+
+    expect(await screen.findByText('Ada')).toHaveAttribute('aria-current', 'page')
   })
 })
