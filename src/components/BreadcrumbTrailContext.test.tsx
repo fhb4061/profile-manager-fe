@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router'
+import userEvent from '@testing-library/user-event'
+import { Link, MemoryRouter } from 'react-router'
 import { BreadcrumbTrailProvider, useBreadcrumbTrail } from './BreadcrumbTrailContext'
 
 function TrailConsumer() {
@@ -8,10 +9,21 @@ function TrailConsumer() {
   return <div data-testid="trail">{trail.join(',')}</div>
 }
 
+function TestNav() {
+  return (
+    <>
+      <Link to="/">home</Link>
+      <Link to="/camera">camera</Link>
+      <Link to="/profiles">profiles</Link>
+    </>
+  )
+}
+
 function renderAt(initialPath: string) {
   return render(
     <MemoryRouter initialEntries={[initialPath]}>
       <BreadcrumbTrailProvider>
+        <TestNav />
         <TrailConsumer />
       </BreadcrumbTrailProvider>
     </MemoryRouter>
@@ -23,5 +35,14 @@ describe('BreadcrumbTrailContext', () => {
     renderAt('/profiles')
 
     expect(screen.getByTestId('trail')).toHaveTextContent('/profiles')
+  })
+
+  it('appends a newly visited path to the trail', async () => {
+    const user = userEvent.setup()
+    renderAt('/')
+
+    await user.click(screen.getByRole('link', { name: 'camera' }))
+
+    expect(screen.getByTestId('trail')).toHaveTextContent('/,/camera')
   })
 })
