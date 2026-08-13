@@ -43,7 +43,7 @@ src/
 ├── components/            # contains ONLY custom hand-written components
 ├── hooks/                 # contains ONLY reusable hooks
 ├── lib/                   # contains ONLY helpers or util like functions only
-├── models/                # contains ONLY types for API responses
+├── models/                # types for API responses, plus app-level types and constants
 ├── pages/                 # contains ONLY pages for this project
 ├── test/                  # contains ONLY test related setups
 ```
