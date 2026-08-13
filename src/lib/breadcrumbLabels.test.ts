@@ -8,4 +8,11 @@ describe('getCrumbLabel', () => {
     expect(getCrumbLabel('/profiles')).toBe('Profiles')
     expect(getCrumbLabel('/profile/edit')).toBe('Edit Profile')
   })
+
+  it('returns the matching profile\'s given name for a /profile/:id route', () => {
+    const profiles = [
+      { sub: 'abc', givenName: 'Ada', familyName: 'Lovelace', initials: 'AL' },
+    ]
+    expect(getCrumbLabel('/profile/abc', profiles)).toBe('Ada')
+  })
 })
