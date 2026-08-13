@@ -91,7 +91,7 @@ export function AppShell() {
     <BreadcrumbTrailProvider>
       <div className="min-h-svh bg-background">
         <header className="border-b">
-          <div className="mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-6">
+          <div className="flex h-14 w-full items-center justify-between px-6">
             <div className="flex items-center gap-2">
               <Link to="/" aria-label="Home" className="text-muted-foreground hover:text-foreground">
                 <Home className="size-4" />
