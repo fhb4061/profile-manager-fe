@@ -27,6 +27,12 @@ npm run verify          # Full sweep: lint + build + test. Canonical pre-report 
 # Must not
 - start the dev server or open a browser to verify UI/frontend changes — user verifies visually themselves
 
+# Authoring `.claude/` config
+- `.claude/skills/*` are installed third-party copies. Pinned — never edit to resolve a conflict. Another caller depends on the original wording
+- Need different behaviour from a skill? State the override in the agent/rule that consumes it, at the point it applies, with an inline note that it overrides the skill. Silent contradictions drift
+- Agent definitions carry project mechanics + deltas only. Don't restate the skill they invoke; if the skill fails to load, the agent stops rather than running on a partial spec
+- Before deleting a "duplicate" rule, check reach — see `## Project rules that reach you` in `.claude/agents/tdd-implementer.md`
+
 # Architecture
 The codebase follows a modular architecture with clear separation of concerns:
 
