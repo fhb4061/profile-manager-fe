@@ -20,7 +20,7 @@ If it turns out non-trivial mid-flight: stay in the worktree, revert exploratory
 Both paths run in a git worktree. The main checkout never leaves `master` — that is the point, so a bad run can never dirty what the user is looking at.
 
 Step "enter a worktree" means, exactly:
-1. `.claude/scripts/worktree-new.sh <type>/<short-name>` — creates `.claude/worktree/<type>/<short-name>` on branch `<type>/<short-name>` off `origin/master`, seeded with `node_modules` + `.env.local`
+1. `.claude/scripts/worktree-new.sh <type>/<short-name>` — creates `.claude/worktrees/<type>/<short-name>` on branch `<type>/<short-name>` off `origin/master`, seeded with `node_modules` + `.env.local`
 2. `EnterWorktree` with the `path:` it printed
 
 Then work there. tdd-implementer inherits the cwd — pass it the worktree path as its repo line, nothing else about worktrees concerns it.
