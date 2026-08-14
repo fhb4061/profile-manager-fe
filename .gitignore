@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# git worktrees (see .claude/rules/feature-bug-workflow.md)
+worktree/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

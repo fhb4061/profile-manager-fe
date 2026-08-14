@@ -8,6 +8,12 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    // Cognito redirect URIs in .env.local are pinned to :5173. Without this a
+    // second dev server silently takes 5174 and auth fails at the redirect.
+    port: 5173,
+    strictPort: true,
+  },
   build: {
     rolldownOptions: {
       output: {
