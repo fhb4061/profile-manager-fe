@@ -8,7 +8,8 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 export default defineConfig([
   // .claude/worktree holds git worktrees of this same repo — linting it would
   // report duplicate errors for files already linted in their own checkout.
-  globalIgnores(['dist', '.claude/worktree']),
+  // .claude/worktrees is the same hazard from tool-created worktrees.
+  globalIgnores(['dist', '.claude/worktree', '.claude/worktrees']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

@@ -14,6 +14,8 @@ dist-ssr
 
 # git worktrees (see .claude/rules/feature-bug-workflow.md)
 .claude/worktree/
+# backstop: where EnterWorktree(name:)/subagent isolation put theirs
+.claude/worktrees/
 
 # Editor directories and files
 .vscode/*
