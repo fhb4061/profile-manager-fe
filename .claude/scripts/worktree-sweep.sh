@@ -1,5 +1,5 @@
 #!/bin/bash
-# Remove worktrees under worktree/ whose branch is already merged into
+# Remove worktrees under .claude/worktree/ whose branch is already merged into
 # origin/master. Skips anything dirty or unmerged and says so.
 #
 #   .claude/scripts/worktree-sweep.sh [--dry-run]
@@ -34,7 +34,7 @@ skipped=0
 
 while IFS= read -r wt; do
   case "$wt" in
-    "$REPO_ROOT/worktree/"*) ;;
+    "$REPO_ROOT/.claude/worktree/"*) ;;
     *) continue ;;
   esac
 
@@ -71,8 +71,8 @@ done < <(git worktree list --porcelain | awk '/^worktree /{print substr($0, 10)}
 
 if [ "$DRY_RUN" = 0 ]; then
   git worktree prune
-  # Drop now-empty <type>/ dirs so worktree/ doesn't accumulate husks.
-  [ -d worktree ] && find worktree -type d -empty -delete
+  # Drop now-empty <type>/ dirs so .claude/worktree/ doesn't accumulate husks.
+  [ -d .claude/worktree ] && find .claude/worktree -type d -empty -delete
 fi
 
 echo

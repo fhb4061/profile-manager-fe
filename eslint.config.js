@@ -6,9 +6,9 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  // 'worktree' holds git worktrees of this same repo — linting it would report
-  // duplicate errors for files that already get linted in their own checkout.
-  globalIgnores(['dist', 'worktree']),
+  // .claude/worktree holds git worktrees of this same repo — linting it would
+  // report duplicate errors for files already linted in their own checkout.
+  globalIgnores(['dist', '.claude/worktree']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

@@ -3,7 +3,7 @@
 #
 #   .claude/scripts/worktree-new.sh <type>/<short-name>
 #
-# Worktree dir : worktree/<type>/<short-name>
+# Worktree dir : .claude/worktree/<type>/<short-name>
 # Branch       : <type>/<short-name>   (base: origin/master, or local master offline)
 # Seeded with  : node_modules (APFS clone-copy) + .env.local (relative symlink)
 #
@@ -26,7 +26,7 @@ if [[ "$BRANCH" != */* ]] || [[ "$BRANCH" == */*/* ]] || [[ "$BRANCH" == */ ]] |
   exit 1
 fi
 
-WT_DIR="worktree/$BRANCH"
+WT_DIR=".claude/worktree/$BRANCH"
 
 if [ -e "$WT_DIR" ]; then
   echo "error: $WT_DIR already exists" >&2
@@ -60,9 +60,9 @@ else
 fi
 
 # .env.local: machine config, identical everywhere, so share one file rather
-# than snapshotting it. Depth is worktree/<type>/<name> -> repo root.
+# than snapshotting it. Depth is .claude/worktree/<type>/<name> -> repo root.
 if [ -f .env.local ]; then
-  ln -s ../../../.env.local "$WT_DIR/.env.local"
+  ln -s ../../../../.env.local "$WT_DIR/.env.local"
   echo "seeded: .env.local (symlink)"
 else
   echo "warning: no .env.local — dev server won't authenticate" >&2

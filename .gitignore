@@ -13,7 +13,7 @@ dist-ssr
 *.local
 
 # git worktrees (see .claude/rules/feature-bug-workflow.md)
-worktree/
+.claude/worktree/
 
 # Editor directories and files
 .vscode/*
