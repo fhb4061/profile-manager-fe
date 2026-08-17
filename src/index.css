@@ -184,6 +184,8 @@
 @layer utilities {
   .hud-panel {
     position: relative;
+    background-color: var(--card);
+    color: var(--card-foreground);
     border: 1px solid var(--hud-line);
     box-shadow:
       0 0 0 1px var(--hud-glow),
@@ -197,36 +199,54 @@
   .hud-corners::before {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: -2px;
     pointer-events: none;
     background-repeat: no-repeat;
     background-image:
-      linear-gradient(to right, var(--hud-line) 2px, transparent 0),
-      linear-gradient(to bottom, var(--hud-line) 2px, transparent 0),
-      linear-gradient(to left, var(--hud-line) 2px, transparent 0),
-      linear-gradient(to bottom, var(--hud-line) 2px, transparent 0),
-      linear-gradient(to left, var(--hud-line) 2px, transparent 0),
-      linear-gradient(to top, var(--hud-line) 2px, transparent 0),
-      linear-gradient(to right, var(--hud-line) 2px, transparent 0),
-      linear-gradient(to top, var(--hud-line) 2px, transparent 0);
+      linear-gradient(var(--hud-line), var(--hud-line)),
+      linear-gradient(var(--hud-line), var(--hud-line)),
+      linear-gradient(var(--hud-line), var(--hud-line)),
+      linear-gradient(var(--hud-line), var(--hud-line)),
+      linear-gradient(var(--hud-line), var(--hud-line)),
+      linear-gradient(var(--hud-line), var(--hud-line)),
+      linear-gradient(var(--hud-line), var(--hud-line)),
+      linear-gradient(var(--hud-line), var(--hud-line));
     background-position:
       top left, top left,
       top right, top right,
       bottom right, bottom right,
       bottom left, bottom left;
     background-size:
-      14px 2px, 2px 14px,
-      14px 2px, 2px 14px,
-      14px 2px, 2px 14px,
-      14px 2px, 2px 14px;
+      16px 2px, 2px 16px,
+      16px 2px, 2px 16px,
+      16px 2px, 2px 16px,
+      16px 2px, 2px 16px;
   }
 
+  /* Grid lives in a ::before layer (not on the element itself) so the
+     depth-fade mask can't clip page content, and panels/header occlude it
+     with their own backgrounds. isolation keeps z-index:-1 above bg-background. */
   .hud-grid-bg {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .hud-grid-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
     background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 32px 32px;
+      linear-gradient(color-mix(in oklab, var(--hud-line) 22%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklab, var(--hud-line) 22%, transparent) 1px, transparent 1px),
+      linear-gradient(color-mix(in oklab, var(--hud-line) 9%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklab, var(--hud-line) 9%, transparent) 1px, transparent 1px);
+    background-size:
+      160px 160px, 160px 160px,
+      32px 32px, 32px 32px;
     background-position: -1px -1px;
+    mask-image: linear-gradient(to bottom, black 30%, transparent 95%);
   }
 
   .hud-scanline {
