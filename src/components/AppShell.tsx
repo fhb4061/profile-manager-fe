@@ -13,6 +13,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { LoginButton } from '@/components/LoginButton'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { BreadcrumbTrailProvider } from '@/components/BreadcrumbTrailContext'
+import { RobotBuddy } from '@/components/RobotBuddy'
 import { useMyProfile } from '@/hooks/useMyProfile'
 
 function AccountMenu() {
@@ -107,6 +108,7 @@ export function AppShell() {
         <main className="mx-auto w-full max-w-3xl px-6 py-8">
           <Outlet />
         </main>
+        <RobotBuddy />
       </div>
     </BreadcrumbTrailProvider>
   )

@@ -87,6 +87,14 @@ describe('AppShell', () => {
     expect(screen.getByRole('switch', { name: /toggle dark mode/i })).toBeInTheDocument()
   })
 
+  it('mounts the robot mascot on every shell page', () => {
+    loggedOut()
+
+    const { container } = renderShell()
+
+    expect(container.querySelector('[data-robot-mode]')).toBeInTheDocument()
+  })
+
   it('shows a Home breadcrumb linking to / in place of the old Profile Manager link', () => {
     loggedIn()
     vi.mocked(api.get).mockResolvedValue({
