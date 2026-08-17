@@ -1,5 +1,6 @@
-import { Link, Outlet } from 'react-router'
+import { Link, Outlet, useLocation } from 'react-router'
 import { useAuth } from 'react-oidc-context'
+import { AnimatePresence, motion } from 'motion/react'
 import { Home, UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -88,6 +89,8 @@ function HeaderAuth() {
 }
 
 export function AppShell() {
+  const location = useLocation()
+
   return (
     <BreadcrumbTrailProvider>
       <div className="min-h-svh bg-background">
@@ -106,7 +109,19 @@ export function AppShell() {
           </div>
         </header>
         <main className="mx-auto w-full max-w-3xl px-6 py-8">
-          <Outlet />
+          {/* HUD "boot" transition on route change: a short fade/slide rather
+              than a hard cut. */}
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
         </main>
         <RobotBuddy />
       </div>
