@@ -40,7 +40,7 @@ export function Profiles() {
           animate={{ opacity: isFetching && !isLoading ? [1, 0.6, 1] : 1 }}
           transition={{ duration: 0.6, ease: 'easeInOut' }}
         >
-          <Card className="mt-6 py-0">
+          <Card className="hud-panel hud-corners mt-6 py-0">
             {isLoading && (
               <ul className="divide-y">
                 {Array.from({ length: 3 }).map((_, index) => (

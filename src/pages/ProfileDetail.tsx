@@ -27,7 +27,7 @@ export function ProfileDetail() {
             <Skeleton className="size-14 rounded-full" />
             <Skeleton className="h-8 w-48" />
           </div>
-          <Card className="mt-6 py-0">
+          <Card className="hud-panel hud-corners mt-6 py-0">
             <dl className="divide-y">
               {[0, 1].map((row) => (
                 <div
@@ -69,7 +69,7 @@ export function ProfileDetail() {
               </Button>
             )}
           </div>
-          <Card className="mt-6 py-0">
+          <Card className="hud-panel hud-corners mt-6 py-0">
             <dl className="divide-y">
               {getFields(data).map((field) => (
                 <div

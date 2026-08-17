@@ -251,7 +251,7 @@ export function EditProfile() {
       )}
 
       {data && !isLoading && (
-        <div className="mt-6">
+        <div className="hud-panel hud-corners mt-6 rounded-lg p-6">
           <EditProfileForm profile={data} photoPoll={photoPoll} onPhotoPollChange={setPhotoPoll} />
         </div>
       )}

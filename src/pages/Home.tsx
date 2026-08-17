@@ -2,7 +2,7 @@ import { Link } from 'react-router'
 
 export function Home() {
   return (
-    <>
+    <div className="hud-panel hud-corners rounded-lg p-6">
       <h1 className="font-heading text-2xl font-semibold tracking-tight">
         Profile Manager
       </h1>
@@ -12,6 +12,6 @@ export function Home() {
       <Link to="/camera" className="mt-4 inline-block text-sm text-primary underline underline-offset-4">
         Try the camera
       </Link>
-    </>
+    </div>
   )
 }
