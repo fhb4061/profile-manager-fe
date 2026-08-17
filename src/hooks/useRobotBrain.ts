@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { subscribeRobotEvent, type RobotEvent } from '@/lib/robotEvents'
 
 export type RobotMode = 'idle' | 'busy' | 'success' | 'error'
 
@@ -12,6 +13,7 @@ export interface UseRobotBrainOptions {
   isMutating: number
   minWanderMs?: number
   maxWanderMs?: number
+  eventDurationMs?: number
   random?: () => number
 }
 
@@ -20,10 +22,22 @@ export function useRobotBrain({
   isMutating,
   minWanderMs = 8000,
   maxWanderMs = 20000,
+  eventDurationMs = 1200,
   random = Math.random,
 }: UseRobotBrainOptions): RobotBrainState {
   const [x, setX] = useState(() => random() * 100)
-  const mode: RobotMode = isFetching + isMutating > 0 ? 'busy' : 'idle'
+  const [event, setEvent] = useState<RobotEvent | null>(null)
+  const mode: RobotMode = event ?? (isFetching + isMutating > 0 ? 'busy' : 'idle')
+
+  useEffect(() => subscribeRobotEvent(setEvent), [])
+
+  useEffect(() => {
+    if (!event) {
+      return
+    }
+    const timeoutId = setTimeout(() => setEvent(null), eventDurationMs)
+    return () => clearTimeout(timeoutId)
+  }, [event, eventDurationMs])
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>

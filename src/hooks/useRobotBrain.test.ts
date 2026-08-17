@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useRobotBrain } from './useRobotBrain'
+import { emitRobotEvent } from '@/lib/robotEvents'
 
 describe('useRobotBrain', () => {
   it('starts idle at an x position derived from the injected random source', () => {
@@ -52,6 +53,45 @@ describe('useRobotBrain', () => {
         vi.advanceTimersByTime(1)
       })
       expect(result.current.x).toBe(90)
+    })
+  })
+
+  describe('mutation events', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('shows success mode on a success event, reverting to idle after the event duration', () => {
+      const { result } = renderHook(() =>
+        useRobotBrain({ isFetching: 0, isMutating: 0, eventDurationMs: 1000 })
+      )
+
+      act(() => emitRobotEvent('success'))
+      expect(result.current.mode).toBe('success')
+
+      act(() => {
+        vi.advanceTimersByTime(1000)
+      })
+      expect(result.current.mode).toBe('idle')
+    })
+
+    it('shows error mode even while busy, overriding busy until the event elapses', () => {
+      const { result } = renderHook(() =>
+        useRobotBrain({ isFetching: 1, isMutating: 0, eventDurationMs: 1000 })
+      )
+      expect(result.current.mode).toBe('busy')
+
+      act(() => emitRobotEvent('error'))
+      expect(result.current.mode).toBe('error')
+
+      act(() => {
+        vi.advanceTimersByTime(1000)
+      })
+      expect(result.current.mode).toBe('busy')
     })
   })
 })
