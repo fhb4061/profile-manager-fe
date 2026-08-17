@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest'
-import { renderHook } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { renderHook, act } from '@testing-library/react'
 import { useRobotBrain } from './useRobotBrain'
 
 describe('useRobotBrain', () => {
@@ -22,5 +22,36 @@ describe('useRobotBrain', () => {
     const { result } = renderHook(() => useRobotBrain({ isFetching: 0, isMutating: 1 }))
 
     expect(result.current.mode).toBe('busy')
+  })
+
+  describe('idle wandering', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('wanders to a new x position after a random interval between 8s and 20s', () => {
+      const random = vi
+        .fn()
+        .mockReturnValueOnce(0.1) // initial x = 10
+        .mockReturnValueOnce(0.5) // interval fraction -> 8000 + 0.5 * 12000 = 14000ms
+        .mockReturnValueOnce(0.9) // next x = 90
+      const { result } = renderHook(() => useRobotBrain({ isFetching: 0, isMutating: 0, random }))
+
+      expect(result.current.x).toBe(10)
+
+      act(() => {
+        vi.advanceTimersByTime(13999)
+      })
+      expect(result.current.x).toBe(10)
+
+      act(() => {
+        vi.advanceTimersByTime(1)
+      })
+      expect(result.current.x).toBe(90)
+    })
   })
 })
