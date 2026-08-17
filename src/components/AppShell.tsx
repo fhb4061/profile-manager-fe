@@ -94,7 +94,7 @@ export function AppShell() {
   return (
     <BreadcrumbTrailProvider>
       <div className="hud-grid-bg min-h-svh bg-background">
-        <header className="hud-scanline border-b border-hud-line/40 bg-background/85 backdrop-blur-sm">
+        <header className="hud-scanline hud-header bg-background/85 backdrop-blur-sm">
           <div className="flex h-14 w-full items-center justify-between px-6">
             <div className="flex items-center gap-2">
               <Link to="/" aria-label="Home" className="text-muted-foreground hover:text-foreground">

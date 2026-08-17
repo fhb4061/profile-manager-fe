@@ -2,8 +2,8 @@ import { Link } from 'react-router'
 
 export function Home() {
   return (
-    <div className="hud-panel hud-corners rounded-lg p-6">
-      <h1 className="font-heading text-2xl font-semibold tracking-tight">
+    <div className="hud-panel hud-corners p-6">
+      <h1 className="hud-title font-heading text-2xl font-semibold">
         Profile Manager
       </h1>
       <p className="mt-1 text-sm text-muted-foreground">

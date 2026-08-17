@@ -240,7 +240,7 @@ export function EditProfile() {
 
   return (
     <>
-      <h1 className="font-heading text-2xl font-semibold tracking-tight">Edit profile</h1>
+      <h1 className="hud-title font-heading text-2xl font-semibold">Edit profile</h1>
 
       {isLoading && (
         <div className="mt-6 flex flex-col gap-4">
@@ -251,7 +251,7 @@ export function EditProfile() {
       )}
 
       {data && !isLoading && (
-        <div className="hud-panel hud-corners mt-6 rounded-lg p-6">
+        <div className="hud-panel hud-corners mt-6 p-6">
           <EditProfileForm profile={data} photoPoll={photoPoll} onPhotoPollChange={setPhotoPoll} />
         </div>
       )}
