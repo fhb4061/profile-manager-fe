@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
+import { AnimatePresence, motion } from 'motion/react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -15,6 +16,15 @@ import type { Profile } from '@/models/profile'
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024
 const ALLOWED_PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const PHOTO_POLL_TIMEOUT_MS = 12000
+// How long the save-confirm sweep plays before navigating away, so it's
+// actually visible instead of being cut off by the route change.
+const SAVE_SWEEP_MS = 350
+
+const shakeAnimation = {
+  initial: { x: 0 },
+  animate: { x: [0, -8, 8, -6, 6, 0] },
+  transition: { duration: 0.4 },
+}
 
 type PhotoPoll = { baselinePhotoUrl: string | undefined }
 
@@ -31,6 +41,7 @@ function EditProfileForm({
   const [givenName, setGivenName] = useState(profile.givenName)
   const [familyName, setFamilyName] = useState(profile.familyName)
   const [validationError, setValidationError] = useState<string | null>(null)
+  const [saveConfirmed, setSaveConfirmed] = useState(false)
   const mutation = useUpdateProfile(profile.sub)
   const profilePath = `/profile/${profile.sub}`
 
@@ -121,12 +132,31 @@ function EditProfileForm({
     setValidationError(null)
     mutation.mutate(
       { givenName: trimmedGivenName, familyName: trimmedFamilyName },
-      { onSuccess: () => navigate(profilePath) }
+      {
+        onSuccess: () => {
+          setSaveConfirmed(true)
+          setTimeout(() => navigate(profilePath), SAVE_SWEEP_MS)
+        },
+      }
     )
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="relative overflow-hidden">
+      <AnimatePresence>
+        {saveConfirmed && (
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-10"
+            initial={{ x: '-100%' }}
+            animate={{ x: '100%' }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: SAVE_SWEEP_MS / 1000, ease: 'easeOut' }}
+          >
+            <div className="h-full w-1/3 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="mb-6 flex items-center gap-4">
         <label htmlFor="photo-input" className="cursor-pointer rounded-full">
           <Avatar size="lg">
@@ -178,12 +208,18 @@ function EditProfileForm({
         </Field>
       </FieldGroup>
 
-      {validationError && <FieldError className="mt-2">{validationError}</FieldError>}
+      {validationError && (
+        <motion.div {...shakeAnimation}>
+          <FieldError className="mt-2">{validationError}</FieldError>
+        </motion.div>
+      )}
 
       {mutation.isError && (
-        <Alert variant="destructive" className="mt-4">
-          <AlertDescription>Couldn't save changes. Try again.</AlertDescription>
-        </Alert>
+        <motion.div {...shakeAnimation}>
+          <Alert variant="destructive" className="mt-4">
+            <AlertDescription>Couldn't save changes. Try again.</AlertDescription>
+          </Alert>
+        </motion.div>
       )}
 
       <div className="mt-6 flex gap-2">
