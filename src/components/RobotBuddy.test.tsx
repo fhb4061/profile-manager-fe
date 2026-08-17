@@ -28,4 +28,15 @@ describe('RobotBuddy', () => {
     expect(robot).toBeInTheDocument()
     expect(robot).toHaveClass('pointer-events-none')
   })
+
+  it.each(['idle', 'busy', 'success', 'error'] as const)(
+    'reflects the %s brain mode on the root element',
+    (mode) => {
+      mockUseRobotBrain.mockReturnValue({ mode, x: 10 })
+
+      const { container } = renderRobot()
+
+      expect(container.querySelector(`[data-robot-mode="${mode}"]`)).toBeInTheDocument()
+    }
+  )
 })
