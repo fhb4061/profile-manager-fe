@@ -11,4 +11,16 @@ describe('useRobotBrain', () => {
     expect(result.current.mode).toBe('idle')
     expect(result.current.x).toBe(25)
   })
+
+  it('is busy while a query is fetching', () => {
+    const { result } = renderHook(() => useRobotBrain({ isFetching: 1, isMutating: 0 }))
+
+    expect(result.current.mode).toBe('busy')
+  })
+
+  it('is busy while a mutation is in flight', () => {
+    const { result } = renderHook(() => useRobotBrain({ isFetching: 0, isMutating: 1 }))
+
+    expect(result.current.mode).toBe('busy')
+  })
 })

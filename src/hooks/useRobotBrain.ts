@@ -13,8 +13,13 @@ export interface UseRobotBrainOptions {
   random?: () => number
 }
 
-export function useRobotBrain({ random = Math.random }: UseRobotBrainOptions): RobotBrainState {
+export function useRobotBrain({
+  isFetching,
+  isMutating,
+  random = Math.random,
+}: UseRobotBrainOptions): RobotBrainState {
   const [x] = useState(() => random() * 100)
+  const mode: RobotMode = isFetching + isMutating > 0 ? 'busy' : 'idle'
 
-  return { mode: 'idle', x }
+  return { mode, x }
 }
