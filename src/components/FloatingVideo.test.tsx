@@ -68,15 +68,20 @@ describe('FloatingVideo', () => {
   it('stops dragging upward at the header bottom edge', () => {
     window.innerWidth = 1000
     window.innerHeight = 1000
+    const restoreHeader = stubHeaderHeight(57)
     const ref = createRef<HTMLVideoElement>()
 
-    const { container } = render(<FloatingVideo videoRef={ref} />)
-    const video = container.querySelector('video') as HTMLVideoElement
+    try {
+      const { container } = render(<FloatingVideo videoRef={ref} />)
+      const video = container.querySelector('video') as HTMLVideoElement
 
-    fireEvent.pointerDown(video, { clientX: 0, clientY: 0 })
-    fireEvent.pointerMove(window, { clientX: 0, clientY: -10000 })
+      fireEvent.pointerDown(video, { clientX: 0, clientY: 0 })
+      fireEvent.pointerMove(window, { clientX: 0, clientY: -10000 })
 
-    expect(video.style.top).toBe('57px')
+      expect(video.style.top).toBe('57px')
+    } finally {
+      restoreHeader()
+    }
   })
 
   it('switches to a grabbing cursor while dragging', () => {
