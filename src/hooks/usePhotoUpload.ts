@@ -26,7 +26,17 @@ export function usePhotoUpload(sub: string, photoUrl: string | undefined) {
     }
 
     setPreviewUrl(URL.createObjectURL(file))
-    uploadPhotoMutation.mutate(file)
+    uploadPhotoMutation.mutate(file, {
+      onError: () => {
+        setUploadError("Couldn't upload photo. Try again.")
+        setPreviewUrl((current) => {
+          if (current) {
+            URL.revokeObjectURL(current)
+          }
+          return null
+        })
+      },
+    })
   }
 
   return { previewUrl, validationError, uploadError, upload }

@@ -87,4 +87,18 @@ describe('usePhotoUpload', () => {
     expect(body.get('file')).toBe(file)
     expect([...body.keys()].at(-1)).toBe('file')
   })
+
+  it('sets uploadError and reverts the preview when the presigned-post request fails', async () => {
+    vi.mocked(api.post).mockRejectedValue(new Error('network error'))
+    const { result } = renderPhotoUpload()
+    const file = new File(['hello'], 'photo.png', { type: 'image/png' })
+
+    act(() => {
+      result.current.upload(file)
+    })
+
+    await vi.waitFor(() => expect(result.current.uploadError).toMatch(/couldn't upload photo/i))
+    expect(result.current.previewUrl).toBeNull()
+    expect(fetch).not.toHaveBeenCalled()
+  })
 })
