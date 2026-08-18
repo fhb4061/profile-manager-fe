@@ -16,7 +16,8 @@ function renderPhotoUpload(sub = '1', photoUrl: string | undefined = undefined) 
   const wrapper = ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   )
-  return renderHook(() => usePhotoUpload(sub, photoUrl), { wrapper })
+  const rendered = renderHook(() => usePhotoUpload(sub, photoUrl), { wrapper })
+  return { ...rendered, queryClient }
 }
 
 function oversizedFile() {
@@ -116,5 +117,52 @@ describe('usePhotoUpload', () => {
 
     await vi.waitFor(() => expect(result.current.uploadError).toMatch(/couldn't upload photo/i))
     expect(result.current.previewUrl).toBeNull()
+  })
+
+  it('polls until the profile reflects the new photo, then stops and clears the preview', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    vi.mocked(api.post).mockResolvedValue({
+      data: { url: 'https://photo-bucket.s3.ap-southeast-2.amazonaws.com/', fields: { key: 'photos/1/abc' } },
+    })
+    vi.mocked(fetch).mockResolvedValue({ ok: true, status: 204 } as Response)
+    let getCallCount = 0
+    vi.mocked(api.get).mockImplementation(() => {
+      getCallCount += 1
+      return Promise.resolve({
+        data: {
+          sub: '1',
+          givenName: 'Ada',
+          familyName: 'Lovelace',
+          initials: 'AL',
+          email: 'ada@example.com',
+          photoUrl: getCallCount > 1 ? 'https://cdn.example.com/photos/1/abc' : undefined,
+        },
+      })
+    })
+
+    const { result, queryClient } = renderPhotoUpload('1', undefined)
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+    const file = new File(['hello'], 'photo.png', { type: 'image/png' })
+
+    act(() => {
+      result.current.upload(file)
+    })
+    await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1500)
+    })
+    await vi.waitFor(() => expect(result.current.previewUrl).toBeNull())
+    expect(result.current.uploadError).toBeNull()
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['profiles'] })
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['profile', '1'] })
+
+    const countAfterLanded = getCallCount
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5000)
+    })
+    expect(getCallCount).toBe(countAfterLanded)
+
+    vi.useRealTimers()
   })
 })
