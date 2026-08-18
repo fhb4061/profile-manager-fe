@@ -101,4 +101,20 @@ describe('usePhotoUpload', () => {
     expect(result.current.previewUrl).toBeNull()
     expect(fetch).not.toHaveBeenCalled()
   })
+
+  it('sets uploadError and reverts the preview when the S3 upload itself fails', async () => {
+    vi.mocked(api.post).mockResolvedValue({
+      data: { url: 'https://photo-bucket.s3.ap-southeast-2.amazonaws.com/', fields: { key: 'photos/1/abc' } },
+    })
+    vi.mocked(fetch).mockResolvedValue({ ok: false, status: 403 } as Response)
+    const { result } = renderPhotoUpload()
+    const file = new File(['hello'], 'photo.png', { type: 'image/png' })
+
+    act(() => {
+      result.current.upload(file)
+    })
+
+    await vi.waitFor(() => expect(result.current.uploadError).toMatch(/couldn't upload photo/i))
+    expect(result.current.previewUrl).toBeNull()
+  })
 })
