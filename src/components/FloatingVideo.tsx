@@ -5,6 +5,10 @@ import { APP_HEADER_HEIGHT } from '@/models/layout'
 const SIZE = { width: 320, height: 180 }
 const TOP_OFFSET = 16
 
+function getHeaderHeight(): number {
+  return document.querySelector('header')?.getBoundingClientRect().height ?? 0
+}
+
 interface FloatingVideoProps {
   videoRef: RefObject<HTMLVideoElement | null>
 }
@@ -12,7 +16,7 @@ interface FloatingVideoProps {
 export function FloatingVideo({ videoRef }: FloatingVideoProps) {
   const initialPosition = {
     x: Math.max(window.innerWidth / 2 - SIZE.width / 2, 0),
-    y: APP_HEADER_HEIGHT + TOP_OFFSET,
+    y: getHeaderHeight() + TOP_OFFSET,
   }
   const { position, isDragging, onPointerDown } = useDraggable({
     size: SIZE,
