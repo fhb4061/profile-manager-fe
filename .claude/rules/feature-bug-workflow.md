@@ -39,7 +39,7 @@ Pushes the branch, opens a ready (non-draft) PR against `master`. Refuses on a d
 
 Compose `--title`/`--body-file` yourself — don't rely on `--fill`:
 - Title: short, imperative, no ceremony.
-- Body, in order, omitting sections with nothing to say (no boilerplate filler): optional 1-line context → `## What` (bullets) → `## Why` (only if not obvious from What) → `## Verified` (what was actually run/checked) → `🤖 Generated with Claude Code` footer.
+- Body, in order, omitting sections with nothing to say (no boilerplate filler): optional 1-line context → `## Why` → `## Verified` (what was actually run/checked) → `🤖 Generated with Claude Code` footer. No `## What` section — the diff is the what; the user reads the code to review it, the body should only add what the code can't say for itself.
 
 ## Standard path (default)
 1. Discuss & agree on seams before code using /grilling skill to gain a common understanding. Applies every round a design/seam gets discussed, not just the first pass on a new feature — a follow-up fix to already-agreed work still needs this. End with a consolidated summary of the full agreed design and an explicit go-ahead before moving to step 3; answering individual clarifying questions in isolation does not substitute for this.
