@@ -75,4 +75,14 @@ describe('Breadcrumbs', () => {
 
     expect(screen.getByText('Profile')).toHaveAttribute('aria-current', 'page')
   })
+
+  it('shows a Profile placeholder for a /profile/:id crumb when profiles resolve without a match', async () => {
+    vi.mocked(api.get).mockResolvedValue({ data: { items: [] } })
+    const user = userEvent.setup()
+
+    renderAt('/')
+    await user.click(screen.getByRole('link', { name: 'profile abc' }))
+
+    expect(await screen.findByText('Profile')).toHaveAttribute('aria-current', 'page')
+  })
 })

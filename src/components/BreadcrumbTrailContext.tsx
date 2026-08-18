@@ -1,9 +1,16 @@
 /* eslint-disable react-refresh/only-export-components -- Context + hook pairing is the standard React pattern */
 import { createContext, useContext, useState, type ReactNode } from 'react'
 import { useLocation } from 'react-router'
-import { updateTrail } from '@/lib/breadcrumbTrail'
 
 const BreadcrumbTrailContext = createContext<string[] | undefined>(undefined)
+
+function updateTrail(trail: string[], path: string): string[] {
+  const index = trail.indexOf(path)
+  if (index !== -1) {
+    return trail.slice(0, index + 1)
+  }
+  return [...trail, path]
+}
 
 export function BreadcrumbTrailProvider({ children }: { children: ReactNode }) {
   const location = useLocation()
