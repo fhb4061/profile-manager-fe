@@ -165,4 +165,40 @@ describe('usePhotoUpload', () => {
 
     vi.useRealTimers()
   })
+
+  it('sets uploadError and reverts the preview if the photo never lands within the poll budget', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    vi.mocked(api.post).mockResolvedValue({
+      data: { url: 'https://photo-bucket.s3.ap-southeast-2.amazonaws.com/', fields: { key: 'photos/1/abc' } },
+    })
+    vi.mocked(fetch).mockResolvedValue({ ok: true, status: 204 } as Response)
+    // photoUrl never changes: upload was rejected server-side, never shows up.
+    vi.mocked(api.get).mockResolvedValue({
+      data: {
+        sub: '1',
+        givenName: 'Ada',
+        familyName: 'Lovelace',
+        initials: 'AL',
+        email: 'ada@example.com',
+        photoUrl: undefined,
+      },
+    })
+
+    const { result } = renderPhotoUpload('1', undefined)
+    const file = new File(['hello'], 'photo.png', { type: 'image/png' })
+
+    act(() => {
+      result.current.upload(file)
+    })
+    await vi.waitFor(() => expect(fetch).toHaveBeenCalled())
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(12000)
+    })
+
+    expect(result.current.uploadError).toMatch(/couldn't upload photo/i)
+    expect(result.current.previewUrl).toBeNull()
+
+    vi.useRealTimers()
+  })
 })
