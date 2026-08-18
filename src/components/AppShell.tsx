@@ -14,6 +14,7 @@ import { LoginButton } from '@/components/LoginButton'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { BreadcrumbTrailProvider } from '@/components/BreadcrumbTrailContext'
 import { useMyProfile } from '@/hooks/useMyProfile'
+import { ROUTES } from '@/models/routes'
 
 function AccountMenu() {
   const auth = useAuth()
@@ -38,7 +39,7 @@ function AccountMenu() {
           <Button
             variant="ghost"
             className="justify-start"
-            render={<Link to="/profile/edit" />}
+            render={<Link to={ROUTES.profileEdit} />}
             nativeButton={false}
           >
             Edit profile
@@ -93,7 +94,7 @@ export function AppShell() {
         <header className="border-b">
           <div className="flex h-14 w-full items-center justify-between px-6">
             <div className="flex items-center gap-2">
-              <Link to="/" aria-label="Home" className="text-muted-foreground hover:text-foreground">
+              <Link to={ROUTES.home} aria-label="Home" className="text-muted-foreground hover:text-foreground">
                 <Home className="size-4" />
               </Link>
               <Breadcrumbs />

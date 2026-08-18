@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router'
 import { useAuth } from 'react-oidc-context'
+import { ROUTES } from '@/models/routes'
 
 // Single place route protection lives: new protected pages nest under this
 // layout route (see App.tsx) rather than each getting a bespoke guard.
@@ -19,7 +20,7 @@ export function ProtectedLayout() {
     // Capture the attempted path so the header's LoginButton can pass it
     // through to signinRedirect's `state`, and Callback can restore it
     // after auth.
-    return <Navigate to="/" state={{ from: location }} replace />
+    return <Navigate to={ROUTES.home} state={{ from: location }} replace />
   }
 
   return <Outlet />

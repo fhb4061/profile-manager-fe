@@ -10,6 +10,7 @@ import { useMyProfile } from '@/hooks/useMyProfile'
 import { usePhotoUpload } from '@/hooks/usePhotoUpload'
 import { useUpdateProfile } from '@/hooks/useUpdateProfile'
 import type { Profile } from '@/models/profile'
+import { profileDetail } from '@/models/routes'
 
 function EditProfileForm({ profile }: { profile: Profile }) {
   const navigate = useNavigate()
@@ -17,7 +18,7 @@ function EditProfileForm({ profile }: { profile: Profile }) {
   const [familyName, setFamilyName] = useState(profile.familyName)
   const [validationError, setValidationError] = useState<string | null>(null)
   const mutation = useUpdateProfile(profile.sub)
-  const profilePath = `/profile/${profile.sub}`
+  const profilePath = profileDetail(profile.sub)
 
   const {
     previewUrl: photoPreviewUrl,

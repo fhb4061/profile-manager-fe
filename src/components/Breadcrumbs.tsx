@@ -11,12 +11,13 @@ import {
 import { useBreadcrumbTrail } from '@/components/BreadcrumbTrailContext'
 import { useProfiles } from '@/hooks/useProfiles'
 import type { Profile } from '@/models/profile'
+import { ROUTES, isProfileDetailPath } from '@/models/routes'
 
 const STATIC_LABELS: Record<string, string> = {
-  '/': 'Home',
-  '/camera': 'Camera',
-  '/profiles': 'Profiles',
-  '/profile/edit': 'Edit Profile',
+  [ROUTES.home]: 'Home',
+  [ROUTES.camera]: 'Camera',
+  [ROUTES.profiles]: 'Profiles',
+  [ROUTES.profileEdit]: 'Edit Profile',
 }
 
 const PROFILE_PATH_PREFIX = '/profile/'
@@ -34,11 +35,6 @@ function getCrumbLabel(path: string, profiles?: Profile[]): string {
   }
 
   return path
-}
-
-/** True for /profile/:id routes, which need a profiles lookup to label; false for the static /profile/edit route. */
-function isProfileDetailPath(path: string): boolean {
-  return path.startsWith(PROFILE_PATH_PREFIX) && !(path in STATIC_LABELS)
 }
 
 export function Breadcrumbs() {

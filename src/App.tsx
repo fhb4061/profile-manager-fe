@@ -4,6 +4,7 @@ import { Home } from './pages/Home'
 import { AppShell } from './components/AppShell'
 import { ProtectedLayout } from './components/ProtectedLayout'
 import { Skeleton } from './components/ui/skeleton'
+import { ROUTES } from './models/routes'
 
 const Profiles = lazy(() => import('./pages/Profiles').then((m) => ({ default: m.Profiles })))
 const EditProfile = lazy(() =>
@@ -24,15 +25,15 @@ function App() {
   return (
     <Suspense fallback={<Skeleton className="h-32 w-full" />}>
       <Routes>
-        <Route path="/callback" element={<Callback />} />
-        <Route path="/silent-renew" element={<SilentRenew />} />
+        <Route path={ROUTES.callback} element={<Callback />} />
+        <Route path={ROUTES.silentRenew} element={<SilentRenew />} />
         <Route element={<AppShell />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/camera" element={<CameraFeed />} />
+          <Route path={ROUTES.home} element={<Home />} />
+          <Route path={ROUTES.camera} element={<CameraFeed />} />
           <Route element={<ProtectedLayout />}>
-            <Route path="/profiles" element={<Profiles />} />
-            <Route path="/profile/edit" element={<EditProfile />} />
-            <Route path="/profile/:id" element={<ProfileDetail />} />
+            <Route path={ROUTES.profiles} element={<Profiles />} />
+            <Route path={ROUTES.profileEdit} element={<EditProfile />} />
+            <Route path={ROUTES.profileDetailPattern} element={<ProfileDetail />} />
           </Route>
         </Route>
       </Routes>
