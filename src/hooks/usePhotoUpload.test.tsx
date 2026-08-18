@@ -42,4 +42,18 @@ describe('usePhotoUpload', () => {
     expect(api.post).not.toHaveBeenCalled()
     expect(fetch).not.toHaveBeenCalled()
   })
+
+  it('rejects a file with an unsupported type without calling the upload API', async () => {
+    const { result } = renderPhotoUpload()
+    const file = new File(['hello'], 'notes.txt', { type: 'text/plain' })
+
+    act(() => {
+      result.current.upload(file)
+    })
+
+    expect(result.current.validationError).toMatch(/jpeg, png, or webp/i)
+    expect(result.current.previewUrl).toBeNull()
+    expect(api.post).not.toHaveBeenCalled()
+    expect(fetch).not.toHaveBeenCalled()
+  })
 })
