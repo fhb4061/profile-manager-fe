@@ -7,11 +7,10 @@ const ALLOWED_PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 export function usePhotoUpload(sub: string, photoUrl: string | undefined) {
   void sub
   void photoUrl
-  const previewUrl = null
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [validationError, setValidationError] = useState<string | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const uploadPhotoMutation = useUploadPhoto()
-  void uploadPhotoMutation
 
   function upload(file: File) {
     setValidationError(null)
@@ -25,6 +24,9 @@ export function usePhotoUpload(sub: string, photoUrl: string | undefined) {
       setValidationError('Photo must be a JPEG, PNG, or WebP image.')
       return
     }
+
+    setPreviewUrl(URL.createObjectURL(file))
+    uploadPhotoMutation.mutate(file)
   }
 
   return { previewUrl, validationError, uploadError, upload }
