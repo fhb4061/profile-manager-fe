@@ -56,4 +56,14 @@ describe('BreadcrumbTrailContext', () => {
 
     expect(screen.getByTestId('trail')).toHaveTextContent('/,/camera')
   })
+
+  it('resets the trail to just Home when navigating there from an entry page never containing /', async () => {
+    const user = userEvent.setup()
+    renderAt('/camera')
+
+    await user.click(screen.getByRole('link', { name: 'home' }))
+
+    expect(screen.getByTestId('trail')).toHaveTextContent('/')
+    expect(screen.getByTestId('trail')).not.toHaveTextContent('/camera,/')
+  })
 })
