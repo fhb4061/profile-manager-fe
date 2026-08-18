@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { ROUTES } from '@/models/routes'
 
 export function Home() {
   return (
@@ -9,7 +10,7 @@ export function Home() {
       <p className="mt-1 text-sm text-muted-foreground">
         Welcome to Profile Manager. Log in to view and manage your profile.
       </p>
-      <Link to="/camera" className="mt-4 inline-block text-sm text-primary underline underline-offset-4">
+      <Link to={ROUTES.camera} className="mt-4 inline-block text-sm text-primary underline underline-offset-4">
         Try the camera
       </Link>
     </>

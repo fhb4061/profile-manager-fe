@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { ChevronRight } from 'lucide-react'
 import { useProfiles } from '@/hooks/useProfiles'
+import { profileDetail } from '@/models/routes'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card } from '@/components/ui/card'
@@ -42,7 +43,7 @@ export function Profiles() {
               {data.items.map((profile) => (
                 <li key={profile.sub}>
                   <Link
-                    to={`/profile/${profile.sub}`}
+                    to={profileDetail(profile.sub)}
                     className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-accent"
                   >
                     <Avatar size="lg">

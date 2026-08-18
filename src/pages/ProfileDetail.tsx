@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useGetProfile } from '@/hooks/useGetProfile'
 import type { Profile } from '@/models/profile'
+import { ROUTES } from '@/models/routes'
 
 export function ProfileDetail() {
   const { id } = useParams();
@@ -64,7 +65,7 @@ export function ProfileDetail() {
               </h1>
             </div>
             {isOwnProfile && (
-              <Button variant="outline" render={<Link to="/profile/edit" />} nativeButton={false}>
+              <Button variant="outline" render={<Link to={ROUTES.profileEdit} />} nativeButton={false}>
                 Edit profile
               </Button>
             )}

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useAuth } from 'react-oidc-context'
+import { ROUTES } from '@/models/routes'
 
 // Processes the redirect back from Cognito. Shows a loading state while
 // auth is still working, then navigates to the originally-requested path
@@ -15,12 +16,12 @@ export function Callback() {
     }
 
     if (!auth.isAuthenticated) {
-      navigate('/', { replace: true })
+      navigate(ROUTES.home, { replace: true })
       return
     }
 
     const state = auth.user?.state as { returnTo?: string } | undefined
-    navigate(state?.returnTo || '/', { replace: true })
+    navigate(state?.returnTo || ROUTES.home, { replace: true })
   }, [auth.isLoading, auth.isAuthenticated, auth.user, navigate])
 
   return (
