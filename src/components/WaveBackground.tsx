@@ -29,7 +29,7 @@ export function WaveBackground() {
       <WaveLayer
         animationClassName="animate-wave-slow"
         heightClassName="h-20"
-        fill="var(--muted-foreground)"
+        fill="var(--muted)"
         opacity={0.1}
       />
       <WaveLayer

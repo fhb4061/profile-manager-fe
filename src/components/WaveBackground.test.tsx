@@ -29,7 +29,7 @@ describe('WaveBackground', () => {
     const paths = container.querySelectorAll('path')
 
     for (const path of paths) {
-      expect(path.getAttribute('fill')).toMatch(/^var\(--(primary|muted-foreground)\)$/)
+      expect(path.getAttribute('fill')).toMatch(/^var\(--(primary|muted)\)$/)
     }
   })
 })
