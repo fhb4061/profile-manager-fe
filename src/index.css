@@ -167,3 +167,32 @@
     @apply font-mono;
   }
 }
+
+@keyframes wave-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-wave-slow {
+  animation: wave-scroll 40s linear infinite;
+}
+
+.animate-wave-medium {
+  animation: wave-scroll 30s linear infinite;
+}
+
+.animate-wave-fast {
+  animation: wave-scroll 20s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-wave-slow,
+  .animate-wave-medium,
+  .animate-wave-fast {
+    animation: none;
+  }
+}

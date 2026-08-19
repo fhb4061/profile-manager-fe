@@ -107,4 +107,13 @@ describe('AppShell', () => {
 
     expect(screen.getByRole('button', { name: /log in/i })).toBeInTheDocument()
   })
+
+  it('renders the animated wave background behind an opaque header', () => {
+    loggedOut()
+
+    const { container } = renderShell()
+
+    expect(container.querySelectorAll('svg.animate-wave-slow')).toHaveLength(1)
+    expect(container.querySelector('header')).toHaveClass('bg-background')
+  })
 })
