@@ -31,7 +31,16 @@ npm run verify          # Full sweep: lint + build + test. Canonical pre-report 
 - `.claude/skills/*` are installed third-party copies. Pinned — never edit to resolve a conflict. Another caller depends on the original wording
 - Need different behaviour from a skill? State the override in the agent/rule that consumes it, at the point it applies, with an inline note that it overrides the skill. Silent contradictions drift
 - Agent definitions carry project mechanics + deltas only. Don't restate the skill they invoke; if the skill fails to load, the agent stops rather than running on a partial spec
-- Before deleting a "duplicate" rule, check reach — see `## Project rules that reach you` in `.claude/agents/tdd-implementer.md`
+
+# Agent skills
+
+## Issue tracker
+
+Issues and specs live as GitHub issues on `fhb4061/profile-manager-fe`, via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+## Domain docs
+
+Single-context layout — no `CONTEXT.md`/`docs/adr/` yet, created lazily by `/domain-modeling`. See `docs/agents/domain.md`.
 
 # Architecture
 The codebase follows a modular architecture with clear separation of concerns:

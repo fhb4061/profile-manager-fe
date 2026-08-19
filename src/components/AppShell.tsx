@@ -4,13 +4,15 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { HeaderAuth } from '@/components/HeaderAuth'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { BreadcrumbTrailProvider } from '@/components/BreadcrumbTrailContext'
+import { WaveBackground } from '@/components/WaveBackground'
 import { ROUTES } from '@/models/routes'
 
 export function AppShell() {
   return (
     <BreadcrumbTrailProvider>
-      <div className="min-h-svh bg-background">
-        <header className="border-b">
+      <div className="relative isolate min-h-svh bg-background">
+        <WaveBackground />
+        <header className="border-b bg-background">
           <div className="flex h-14 w-full items-center justify-between px-6">
             <div className="flex items-center gap-2">
               <Link to={ROUTES.home} aria-label="Home" className="text-muted-foreground hover:text-foreground">
